@@ -2,6 +2,14 @@ from dsl import *
 
 
 
+def verify_00576224(I: Grid) -> Grid:
+    x0 = vmirror(I)
+    x1 = hconcat(I, hconcat(I, I))
+    x2 = hconcat(x0, hconcat(x0, x0))
+    x3 = vconcat(x1, vconcat(x2, x1))
+    return x3
+
+
 def verify_007bbfb7(I: Grid) -> Grid:
     x0 = palette(I)
     x1 = other(x0, ZERO)
@@ -1772,14 +1780,14 @@ def verify_29c11459(I: Grid) -> Grid:
 
 def verify_29ec7d0e(I: Grid) -> Grid:
     x0 = palette(I)
-    x1 = objects(I, T, F, F)
-    x2 = lbind(colorfilter, x1)
-    x3 = compose(size, x2)
-    x4 = valmin(x0, x3)
-    x5 = matcher(x3, x4)
-    x6 = sfilter(x0, x5)
-    x7 = lbind(colorcount, I)
-    x8 = argmin(x6, x7)
+    x1 = lbind(lbind, contained)
+    x2 = compose(lbind(compose, flip), x1)
+    x3 = compose(lbind(sfilter, I), x2)
+    x4 = compose(hperiod, compose(asobject, x3))
+    x5 = compose(size, x3)
+    x6 = compose(positive, x5)
+    x7 = sfilter(x0, x6)
+    x8 = argmin(x7, x4)
     x9 = asobject(I)
     x10 = matcher(first, x8)
     x11 = compose(flip, x10)
@@ -2853,7 +2861,8 @@ def verify_4290ef0e(I: Grid) -> Grid:
     x6 = compose(maximum, shape)
     x7 = fork(add, x6, x5)
     x8 = compose(invert, x7)
-    x9 = order(x1, x8)
+    x8b = fork(astuple, x8, compose(invert, color))
+    x9 = order(x1, x8b)
     x10 = rbind(add, DOWN)
     x11 = compose(x10, ulcorner)
     x12 = fork(contained, x11, toindices)
@@ -3642,7 +3651,7 @@ def verify_53b68214(I: Grid) -> Grid:
     x26 = compose(size, x13)
     x27 = matcher(x26, x25)
     x28 = sfilter(x23, x27)
-    x29 = fork(multiply, first, last)
+    x29 = fork(add, first, last)
     x30 = argmax(x28, x29)
     x31 = interval(ZERO, TEN, ONE)
     x32 = lbind(shift, x1)
@@ -5345,10 +5354,29 @@ def verify_7e0986d6(I: Grid) -> Grid:
     x5 = mapply(toindices, x4)
     x6 = fill(I, x0, x5)
     x7 = objects(x6, T, F, T)
-    x8 = fork(recolor, color, backdrop)
-    x9 = mapply(x8, x7)
-    x10 = paint(x6, x9)
-    return x10
+    x8 = x6
+    for obj in x7:
+        x9 = color(obj)
+        x10 = toindices(obj)
+        x11 = sorted(set(cc for (_, cc) in x10))
+        x12 = {}
+        for cc in x11:
+            x13 = [rr for (rr, ccc) in x10 if ccc == cc]
+            x12[cc] = (min(x13), max(x13))
+        x14 = [[x11[0]]]
+        for cc in x11[1:]:
+            x15 = x12[cc]
+            x16 = x12[x14[-1][-1]]
+            if cc == x14[-1][-1] + 1 and abs(x15[0] - x16[0]) <= 2 and abs(x15[1] - x16[1]) <= 2:
+                x14[-1].append(cc)
+            else:
+                x14.append([cc])
+        for x17 in x14:
+            x18 = min(x12[cc][0] for cc in x17)
+            x19 = max(x12[cc][1] for cc in x17)
+            x20 = frozenset((r, c) for r in range(x18, x19 + 1) for c in range(min(x17), max(x17) + 1))
+            x8 = fill(x8, x9, x20)
+    return x8
 
 
 def verify_7f4411dc(I: Grid) -> Grid:
@@ -6409,7 +6437,7 @@ def verify_97a05b5b(I: Grid) -> Grid:
     x34 = lbind(rbind, rapply)
     x35 = chain(x33, x34, x30)
     x36 = lbind(occurrences, x10)
-    x37 = chain(first, x36, asobject)
+    x37 = chain(rbind(valmin, identity), x36, asobject)
     x38 = lbind(argmax, x17)
     x39 = compose(x38, x35)
     x40 = compose(initset, x39)
@@ -6998,73 +7026,326 @@ def verify_a61f2674(I: Grid) -> Grid:
 
 
 def verify_a64e4611(I: Grid) -> Grid:
+    x0 = _a64e4611_solve(I)
+    return x0
+
+
+def _a64e4611_solve(I):
     x0 = mostcolor(I)
-    x1 = shape(I)
-    x2 = add(TWO, x1)
-    x3 = canvas(x0, x2)
-    x4 = asobject(I)
-    x5 = shift(x4, UNITY)
-    x6 = paint(x3, x5)
-    x7 = double(SIX)
-    x8 = astuple(ONE, x7)
-    x9 = connect(UNITY, x8)
-    x10 = outbox(x9)
-    x11 = backdrop(x10)
-    x12 = recolor(x0, x11)
-    x13 = recolor(THREE, x9)
-    x14 = lbind(shift, x13)
-    x15 = lbind(mapply, x14)
-    x16 = rbind(occurrences, x12)
-    x17 = compose(x15, x16)
-    x18 = fork(paint, identity, x17)
-    x19 = x18(x6)
-    x20 = ofcolor(x19, THREE)
-    x21 = dmirror(x6)
-    x22 = x18(x21)
-    x23 = dmirror(x22)
-    x24 = ofcolor(x23, THREE)
-    x25 = combine(x20, x24)
-    x26 = fill(x6, THREE, x25)
-    x27 = astuple(TWO, ONE)
-    x28 = dneighbors(UNITY)
-    x29 = remove(x27, x28)
-    x30 = recolor(x0, x29)
-    x31 = initset(UNITY)
-    x32 = recolor(THREE, x31)
-    x33 = combine(x30, x32)
-    x34 = recolor(x0, x33)
-    x35 = astuple(ONE, THREE)
-    x36 = initset(x35)
-    x37 = insert(ZERO_BY_TWO, x36)
-    x38 = insert(RIGHT, x37)
-    x39 = insert(DOWN, x38)
-    x40 = recolor(x0, x39)
-    x41 = astuple(ONE, TWO)
-    x42 = initset(x41)
-    x43 = insert(UNITY, x42)
-    x44 = recolor(THREE, x43)
-    x45 = combine(x40, x44)
-    x46 = recolor(x0, x45)
-    x47 = lbind(shift, x34)
-    x48 = lbind(mapply, x47)
-    x49 = rbind(occurrences, x33)
-    x50 = compose(x48, x49)
-    x51 = fork(paint, identity, x50)
-    x52 = lbind(shift, x46)
-    x53 = lbind(mapply, x52)
-    x54 = rbind(occurrences, x45)
-    x55 = compose(x53, x54)
-    x56 = fork(paint, identity, x55)
-    x57 = compose(x51, x56)
-    x58 = compose(rot90, x57)
-    x59 = power(x58, FOUR)
-    x60 = power(x59, TWO)
-    x61 = asindices(x26)
-    x62 = box(x61)
-    x63 = fill(x26, THREE, x62)
-    x64 = x60(x63)
-    x65 = trim(x64)
-    return x65
+    x1 = height(I)
+    x2 = width(I)
+    x3 = _a64e4611_find_vband(I, x0, x1, x2)
+    if x3 is None:
+        return I
+    x4 = x3[0]
+    x5 = x3[1]
+    x6 = x3[2]
+    x7 = _a64e4611_find_arms(I, x0, x1, x2, x4, x5, x6)
+    x8 = _a64e4611_compute_threes(I, x0, x1, x2, x4, x5, x6, x7)
+    x9 = fill(I, THREE, x8)
+    return x9
+
+
+def _a64e4611_find_vband(I, bg, h, w):
+    col_run_starts = {}
+    c = 0
+    while c < w:
+        start = h
+        r = h - 1
+        while r >= 0:
+            if I[r][c] == bg:
+                start = r
+            else:
+                break
+            r = r - 1
+        col_run_starts[c] = start
+        c = c + 1
+    best_band = None
+    best_score = 0
+    spi = 0
+    while spi <= h // 2:
+        eligible = tuple(c for c in range(w) if col_run_starts[c] <= spi)
+        if len(eligible) >= 3:
+            ranges = []
+            cs = eligible[0]
+            ce = eligible[0]
+            k = 1
+            while k < len(eligible):
+                if eligible[k] == ce + 1:
+                    ce = eligible[k]
+                else:
+                    ranges.append((cs, ce))
+                    cs = eligible[k]
+                    ce = eligible[k]
+                k = k + 1
+            ranges.append((cs, ce))
+            ri = 0
+            while ri < len(ranges):
+                rcs, rce = ranges[ri]
+                bw = rce - rcs + 1
+                if bw >= 3:
+                    actual_spi = max(col_run_starts[c] for c in range(rcs, rce + 1))
+                    score = bw * (h - actual_spi)
+                    if score > best_score:
+                        best_score = score
+                        best_band = (rcs, rce, actual_spi)
+                ri = ri + 1
+        spi = spi + 1
+    return best_band
+
+
+def _a64e4611_contiguous(rows, min_size):
+    if len(rows) == 0:
+        return []
+    ranges = []
+    cs = rows[0]
+    ce = rows[0]
+    k = 1
+    while k < len(rows):
+        if rows[k] == ce + 1:
+            ce = rows[k]
+        else:
+            if ce - cs + 1 >= min_size:
+                ranges.append((cs, ce))
+            cs = rows[k]
+            ce = rows[k]
+        k = k + 1
+    if ce - cs + 1 >= min_size:
+        ranges.append((cs, ce))
+    return ranges
+
+
+def _a64e4611_find_arms(I, bg, h, w, vcs, vce, vspi):
+    left_rows = []
+    right_rows = []
+    r = vspi
+    while r < h:
+        all_left = True
+        c = 0
+        while c <= vce:
+            if I[r][c] != bg:
+                all_left = False
+                break
+            c = c + 1
+        all_right = True
+        c = vcs
+        while c < w:
+            if I[r][c] != bg:
+                all_right = False
+                break
+            c = c + 1
+        if all_left:
+            left_rows.append(r)
+        if all_right:
+            right_rows.append(r)
+        r = r + 1
+    left_ranges = _a64e4611_contiguous(left_rows, 3)
+    right_ranges = _a64e4611_contiguous(right_rows, 3)
+    both_ranges = []
+    used_left = set()
+    used_right = set()
+    li = 0
+    while li < len(left_ranges):
+        ri = 0
+        while ri < len(right_ranges):
+            ors = max(left_ranges[li][0], right_ranges[ri][0])
+            ore = min(left_ranges[li][1], right_ranges[ri][1])
+            if ore - ors + 1 >= 3:
+                both_ranges.append((ors, ore))
+                used_left.add(li)
+                used_right.add(ri)
+            ri = ri + 1
+        li = li + 1
+    single_left = []
+    li = 0
+    while li < len(left_ranges):
+        if li not in used_left:
+            single_left.append(left_ranges[li])
+        li = li + 1
+    single_right = []
+    ri = 0
+    while ri < len(right_ranges):
+        if ri not in used_right:
+            single_right.append(right_ranges[ri])
+        ri = ri + 1
+    return (both_ranges, single_left, single_right)
+
+
+def _a64e4611_compute_threes(I, bg, h, w, vcs, vce, vspi, arms):
+    both_ranges = arms[0]
+    single_left = arms[1]
+    single_right = arms[2]
+    three_positions = set()
+    inner_row_start = vspi + 1 if vspi > 0 else vspi
+    c = vcs + 1
+    while c < vce:
+        r = inner_row_start
+        while r < h:
+            three_positions.add((r, c))
+            r = r + 1
+        c = c + 1
+    ai = 0
+    while ai < len(both_ranges):
+        rs, re = both_ranges[ai]
+        irs = rs + 1 if rs > 0 else rs
+        ire = re - 1
+        r = irs
+        while r <= ire:
+            c = 0
+            while c <= vcs:
+                three_positions.add((r, c))
+                c = c + 1
+            c = vce
+            while c < w:
+                three_positions.add((r, c))
+                c = c + 1
+            r = r + 1
+        ai = ai + 1
+    ai = 0
+    while ai < len(single_left):
+        rs, re = single_left[ai]
+        irs = rs + 1 if rs > 0 else rs
+        ire = re - 1
+        r = irs
+        while r <= ire:
+            c = 0
+            while c <= vcs:
+                three_positions.add((r, c))
+                c = c + 1
+            r = r + 1
+        ai = ai + 1
+    ai = 0
+    while ai < len(single_right):
+        rs, re = single_right[ai]
+        irs = rs + 1 if rs > 0 else rs
+        ire = re - 1
+        r = irs
+        while r <= ire:
+            c = vce
+            while c < w:
+                three_positions.add((r, c))
+                c = c + 1
+            r = r + 1
+        ai = ai + 1
+    all_left = both_ranges + single_left
+    all_right = both_ranges + single_right
+    ai = 0
+    while ai < len(all_right):
+        rs, re = all_right[ai]
+        if rs > 0:
+            sec_cols = []
+            c = vce
+            while c < w:
+                ok = True
+                r = 0
+                while r < rs:
+                    if I[r][c] != bg:
+                        ok = False
+                        break
+                    r = r + 1
+                if ok:
+                    sec_cols.append(c)
+                c = c + 1
+            sec_ranges = _a64e4611_contiguous(sec_cols, 3)
+            si = 0
+            while si < len(sec_ranges):
+                scs, sce = sec_ranges[si]
+                c = scs + 1
+                while c < sce:
+                    r = 0
+                    ire = re - 1
+                    while r <= ire:
+                        three_positions.add((r, c))
+                        r = r + 1
+                    c = c + 1
+                si = si + 1
+        if re < h - 1:
+            sec_cols = []
+            c = vce
+            while c < w:
+                ok = True
+                r = re + 1
+                while r < h:
+                    if I[r][c] != bg:
+                        ok = False
+                        break
+                    r = r + 1
+                if ok:
+                    sec_cols.append(c)
+                c = c + 1
+            sec_ranges = _a64e4611_contiguous(sec_cols, 3)
+            si = 0
+            while si < len(sec_ranges):
+                scs, sce = sec_ranges[si]
+                c = scs + 1
+                while c < sce:
+                    irs = rs + 1 if rs > 0 else rs
+                    r = irs
+                    while r < h:
+                        three_positions.add((r, c))
+                        r = r + 1
+                    c = c + 1
+                si = si + 1
+        ai = ai + 1
+    ai = 0
+    while ai < len(all_left):
+        rs, re = all_left[ai]
+        if rs > 0:
+            sec_cols = []
+            c = 0
+            while c <= vcs:
+                ok = True
+                r = 0
+                while r < rs:
+                    if I[r][c] != bg:
+                        ok = False
+                        break
+                    r = r + 1
+                if ok:
+                    sec_cols.append(c)
+                c = c + 1
+            sec_ranges = _a64e4611_contiguous(sec_cols, 3)
+            si = 0
+            while si < len(sec_ranges):
+                scs, sce = sec_ranges[si]
+                c = scs + 1
+                while c < sce:
+                    r = 0
+                    ire = re - 1
+                    while r <= ire:
+                        three_positions.add((r, c))
+                        r = r + 1
+                    c = c + 1
+                si = si + 1
+        if re < h - 1:
+            sec_cols = []
+            c = 0
+            while c <= vcs:
+                ok = True
+                r = re + 1
+                while r < h:
+                    if I[r][c] != bg:
+                        ok = False
+                        break
+                    r = r + 1
+                if ok:
+                    sec_cols.append(c)
+                c = c + 1
+            sec_ranges = _a64e4611_contiguous(sec_cols, 3)
+            si = 0
+            while si < len(sec_ranges):
+                scs, sce = sec_ranges[si]
+                c = scs + 1
+                while c < sce:
+                    irs = rs + 1 if rs > 0 else rs
+                    r = irs
+                    while r < h:
+                        three_positions.add((r, c))
+                        r = r + 1
+                    c = c + 1
+                si = si + 1
+        ai = ai + 1
+    return frozenset(three_positions)
 
 
 def verify_a65b410d(I: Grid) -> Grid:

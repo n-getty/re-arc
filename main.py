@@ -185,7 +185,7 @@ def evaluate_verifiers_on_original_tasks() -> None:
     verifiers = get_verifiers()
     dataset = dict()
     for key in verifiers.keys():
-        with open(f'arc_original/training/{key}.json', 'r') as fp:
+        with open(f'data/arc_original/training/{key}.json', 'r') as fp:
             task = json.load(fp)
         dataset[key] = format_task(task)
     fix_bugs(dataset)
