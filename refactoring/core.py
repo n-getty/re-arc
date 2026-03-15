@@ -16,6 +16,7 @@ def run_validation(task_id, filepath):
 
 def find_helpers(node, task_id, all_funcs):
     """Find all helper functions (_{task_id}_*) referenced by a verifier node."""
+    ast.fix_missing_locations(node)
     found, src = set(), ast.unparse(node)
     for fn in all_funcs:
         if fn.startswith(f'_{task_id}_') and fn in src:
@@ -25,7 +26,9 @@ def find_helpers(node, task_id, all_funcs):
     while expanded:
         expanded = False
         for fn in list(found):
-            hsrc = ast.unparse(all_funcs[fn])
+            helper = all_funcs[fn]
+            ast.fix_missing_locations(helper)
+            hsrc = ast.unparse(helper)
             for on in all_funcs:
                 if on.startswith(f'_{task_id}_') and on in hsrc and on not in found:
                     found.add(on)
@@ -41,6 +44,7 @@ def process_verifiers(verifier_file, output_dir, transformer_classes, skip_ids=(
     with open(verifier_file, 'r') as f:
         source = f.read()
     tree = ast.parse(source)
+    ast.fix_missing_locations(tree)
     all_funcs = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
     os.makedirs(output_dir, exist_ok=True)
 
@@ -74,10 +78,10 @@ def process_verifiers(verifier_file, output_dir, transformer_classes, skip_ids=(
             continue
         cand += 1
 
+        ast.fix_missing_locations(current_node)
         helpers = find_helpers(current_node, task_id, all_funcs)
         hblock = "\n\n".join(ast.unparse(h) for h in helpers) + "\n\n" if helpers else ""
         out_p = os.path.join(output_dir, f"verify_{task_id}.py")
-        ast.fix_missing_locations(current_node)
         with open(out_p, 'w') as f:
             f.write(header + hblock + ast.unparse(current_node) + "\n")
 

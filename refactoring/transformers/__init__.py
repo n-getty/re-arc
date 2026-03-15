@@ -5,3 +5,5 @@ from refactoring.transformers.lambda_fold import LambdaFoldTransformer
 from refactoring.transformers.for_fold import ForFoldTransformer
 from refactoring.transformers.iteration import IterationTransformer
 from refactoring.transformers.bfs import BFSTransformer, HelperBFSTransformer
+from refactoring.transformers.fold_inline import FoldInlineTransformer
+from refactoring.transformers.direct_inline import DirectCallInlineTransformer

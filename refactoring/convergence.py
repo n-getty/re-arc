@@ -1,3 +1,4 @@
+import glob
 import subprocess
 import sys
 import os
@@ -6,6 +7,7 @@ from refactoring.core import process_verifiers
 from refactoring.transformers import (
     IterationTransformer,
     LambdaFoldTransformer,
+    WhileFoldTransformer,
     BboxTransformer,
     TupleUnpackTransformer,
     ForFoldTransformer,
@@ -19,6 +21,7 @@ from refactoring.apply import main as apply_refactors
 PIPELINE = [
     ('iteration', [IterationTransformer]),
     ('lambda_fold', [LambdaFoldTransformer]),
+    ('while_fold', [WhileFoldTransformer]),
     ('bbox+unpack', [BboxTransformer, TupleUnpackTransformer]),
     ('for_fold', [ForFoldTransformer]),
     ('bfs', [BFSTransformer]),
@@ -36,6 +39,9 @@ def run_pipeline(verifier_file='verifiers.py', output_dir='pending_refactors', p
 
         for name, transformers in PIPELINE:
             print(f"\n--- {name} ---")
+            # Clear stale refactors from previous steps
+            for stale in glob.glob(os.path.join(output_dir, 'verify_*.py')):
+                os.remove(stale)
             process_verifiers(verifier_file, output_dir, transformers)
 
             print("Applying changes...")
