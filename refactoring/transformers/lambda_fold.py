@@ -205,39 +205,19 @@ class LambdaFoldTransformer(ast.NodeTransformer):
         ast.fix_missing_locations(helper_def)
 
         # Build collection for fold
+        idx_init_info = self._find_init_in_body(body, while_idx, inc_var)
+        start_val = idx_init_info[1] if idx_init_info and idx_init_info[1] is not None else None
+
         if has_item_access:
             final_col = copy.deepcopy(collection_node)
             if idx_used:
-                size_call = ast.Call(func=ast.Name(id='size', ctx=ast.Load()), args=[final_col], keywords=[])
-                if stride == 1:
-                    final_col = ast.Call(
-                        func=ast.Name(id='range', ctx=ast.Load()),
-                        args=[size_call], keywords=[]
-                    )
-                else:
-                    range_args = [ast.Constant(value=0), size_call, ast.Constant(value=stride)]
-                    final_col = ast.Call(
-                        func=ast.Name(id='range', ctx=ast.Load()),
-                        args=range_args, keywords=[]
-                    )
+                # Use limit_node from condition, not size(collection)
+                final_col = self._build_range(start_val, copy.deepcopy(limit_node), stride)
             if not (isinstance(final_col, ast.Call) and isinstance(final_col.func, ast.Name)
                     and final_col.func.id in ('totuple', 'range')):
                 final_col = ast.Call(func=ast.Name(id='totuple', ctx=ast.Load()), args=[final_col], keywords=[])
         else:
-            if stride == 1:
-                final_col = ast.Call(func=ast.Name(id='range', ctx=ast.Load()),
-                                    args=[copy.deepcopy(limit_node)], keywords=[])
-            elif stride == -1:
-                # Reverse: range(start, stop, -1) — start from init, stop at limit
-                idx_init_info = self._find_init_in_body(body, while_idx, inc_var)
-                start_node = ast.Constant(value=idx_init_info[1]) if idx_init_info and idx_init_info[1] is not None else ast.Name(id=inc_var, ctx=ast.Load())
-                final_col = ast.Call(func=ast.Name(id='range', ctx=ast.Load()),
-                                    args=[start_node, copy.deepcopy(limit_node), ast.Constant(value=-1)],
-                                    keywords=[])
-            else:
-                final_col = ast.Call(func=ast.Name(id='range', ctx=ast.Load()),
-                                    args=[ast.Constant(value=0), copy.deepcopy(limit_node), ast.Constant(value=stride)],
-                                    keywords=[])
+            final_col = self._build_range(start_val, copy.deepcopy(limit_node), stride)
 
         initial_state = (ast.Tuple(elts=[ast.Name(id=v, ctx=ast.Load()) for v in acc_vars], ctx=ast.Load())
                          if len(acc_vars) > 1 else ast.Name(id=acc_vars[0], ctx=ast.Load()))
@@ -406,6 +386,24 @@ class LambdaFoldTransformer(ast.NodeTransformer):
             return ast.Constant(value=0)
 
         return None
+
+    def _build_range(self, start_val, limit_node, stride):
+        """Build a range() call from start value, limit node, and stride."""
+        if stride == 1:
+            if start_val is None or start_val == 0:
+                return ast.Call(func=ast.Name(id='range', ctx=ast.Load()),
+                               args=[limit_node], keywords=[])
+            else:
+                return ast.Call(func=ast.Name(id='range', ctx=ast.Load()),
+                               args=[ast.Constant(value=start_val), limit_node], keywords=[])
+        elif stride == -1:
+            start_node = ast.Constant(value=start_val) if start_val is not None else limit_node
+            return ast.Call(func=ast.Name(id='range', ctx=ast.Load()),
+                           args=[start_node, limit_node, ast.Constant(value=-1)], keywords=[])
+        else:
+            start = ast.Constant(value=start_val if start_val is not None else 0)
+            return ast.Call(func=ast.Name(id='range', ctx=ast.Load()),
+                           args=[start, limit_node, ast.Constant(value=stride)], keywords=[])
 
     def _find_init_in_body(self, body, while_idx, var_name):
         for j in range(while_idx - 1, -1, -1):
