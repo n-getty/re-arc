@@ -428,6 +428,33 @@ def totuple(
     return tuple(container)
 
 
+def any_match(
+    container: Iterable,
+    condition: Callable
+) -> Boolean:
+    """ returns True if any element satisfies the condition """
+    return any(condition(e) for e in container)
+
+
+def all_match(
+    container: Iterable,
+    condition: Callable
+) -> Boolean:
+    """ returns True if all elements satisfy the condition """
+    return all(condition(e) for e in container)
+
+
+def find_first(
+    container: Iterable,
+    condition: Callable,
+    default: Any = None
+) -> Any:
+    """ returns the first element that satisfies the condition, or default """
+    for e in container:
+        if condition(e): return e
+    return default
+
+
 def first(
     container: Container
 ) -> Any:
@@ -1597,3 +1624,22 @@ def vperiod(
         if pruned.issubset(normalized):
             return p
     return h
+
+
+def fold(
+    container: Container,
+    initial: Any,
+    function: Callable
+) -> Any:
+    """ left fold / reduce over container with initial value """
+    result = initial
+    for element in container:
+        result = function(result, element)
+    return result
+
+
+def bbox(
+    patch: Patch
+) -> Tuple[Integer, Integer, Integer, Integer]:
+    """ bounding box as (uppermost, lowermost, leftmost, rightmost) """
+    return (uppermost(patch), lowermost(patch), leftmost(patch), rightmost(patch))

@@ -41,6 +41,9 @@ def sfilter( container: Container, condition: Callable ) -> Container:  # keep e
 def mfilter( container: Container, function: Callable ) -> FrozenSet:  # filter and merge
 def extract( container: Container, condition: Callable ) -> Any:  # first element of container that satisfies condition
 def totuple( container: FrozenSet ) -> Tuple:  # conversion to tuple
+def any_match( container: Iterable, condition: Callable ) -> Boolean:  # returns True if any element satisfies the condition
+def all_match( container: Iterable, condition: Callable ) -> Boolean:  # returns True if all elements satisfy the condition
+def find_first( container: Iterable, condition: Callable, default: Any = None ) -> Any:  # returns the first element that satisfies the condition, or default
 def first( container: Container ) -> Any:  # first item of container
 def last( container: Container ) -> Any:  # last item of container
 def insert( value: Any, container: FrozenSet ) -> FrozenSet:  # insert item into container
@@ -158,3 +161,5 @@ def frontiers( grid: Grid ) -> Objects:  # set of frontiers
 def compress( grid: Grid ) -> Grid:  # removes frontiers from grid
 def hperiod( obj: Object ) -> Integer:  # horizontal periodicity
 def vperiod( obj: Object ) -> Integer:  # vertical periodicity
+def fold( container: Container, initial: Any, function: Callable ) -> Any:  # left fold / reduce over container with initial value
+def bbox( patch: Patch ) -> Tuple[Integer, Integer, Integer, Integer]:  # bounding box as (uppermost, lowermost, leftmost, rightmost)

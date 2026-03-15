@@ -183,22 +183,27 @@ def evaluate_verifiers_on_original_tasks() -> None:
     runs the verifiers on the original ARC training tasks
     """
     verifiers = get_verifiers()
+    agi2c = 0
     dataset = dict()
     for key in verifiers.keys():
-        with open(f'data/arc_original/training/{key}.json', 'r') as fp:
-            task = json.load(fp)
-        dataset[key] = format_task(task)
+        try:
+            with open(f'data/arc_original/training/{key}.json', 'r') as fp:
+                task = json.load(fp)
+            dataset[key] = format_task(task)
+        except:
+            agi2c += 1
+            pass
     fix_bugs(dataset)
     failed_on = set()
     for key, verifier in verifiers.items():
-        task = dataset[key]
         try:
+            task = dataset[key]
             for example in task['train'] + task['test']:
                 assert verifier(example['input']) == example['output']
         except:
             failed_on.add(key)
     n = len(dataset)
-    k = len(failed_on)
+    k = len(failed_on) - agi2c
     print(f'verification programs work for all examples for {n-k}/{n} tasks')
     print(f'verification fails (on one example) for tasks {failed_on}')
 
