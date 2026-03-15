@@ -87,6 +87,12 @@ class LambdaFoldTransformer(ast.NodeTransformer):
         if not limit_node:
             return None
 
+        # Reject growing-collection loops: if limit references len/size of a
+        # variable that is modified inside the loop body, fold would freeze
+        # the range at its initial size.
+        if self._limit_uses_mutable_size(limit_node, w_body):
+            return None
+
         # Check for item access at start
         first_stmt = w_body[0]
         has_item_access = False
@@ -121,6 +127,10 @@ class LambdaFoldTransformer(ast.NodeTransformer):
         acc_vars = []
         for var in sorted(list(assigned_in_loop)):
             if var not in exclude and (var in local_defs or var in self.all_defs):
+                # Skip variables that are always written before read in body_middle
+                # (these are loop-local temporaries, not inter-iteration state)
+                if self._is_write_before_read(body_middle, var):
+                    continue
                 acc_vars.append(var)
 
         if not acc_vars:
@@ -148,6 +158,11 @@ class LambdaFoldTransformer(ast.NodeTransformer):
             la.visit(s)
         if la.found_break:
             return None
+        # Check for early return inside the loop body
+        for s in body_middle:
+            for n in ast.walk(s):
+                if isinstance(n, ast.Return):
+                    return None
         # Check for inc_var being assigned in body_middle (break simulation like x5 = x1)
         for s in body_middle:
             for n in ast.walk(s):
@@ -340,11 +355,17 @@ class LambdaFoldTransformer(ast.NodeTransformer):
             # Forward: i != limit (with positive stride, equivalent to i < limit)
             if (isinstance(op, ast.NotEq) and self._is_name(test.left, inc_var) and stride > 0):
                 return test.comparators[0]
-            # Reverse: i >= limit or i > limit
-            if (isinstance(op, (ast.GtE, ast.Gt)) and self._is_name(test.left, inc_var) and stride < 0):
+            # Reverse: i >= limit → range(start, limit - 1, -1)
+            if (isinstance(op, ast.GtE) and self._is_name(test.left, inc_var) and stride < 0):
+                return ast.BinOp(left=test.comparators[0], op=ast.Sub(), right=ast.Constant(value=1))
+            # Reverse: i > limit → range(start, limit, -1)
+            if (isinstance(op, ast.Gt) and self._is_name(test.left, inc_var) and stride < 0):
                 return test.comparators[0]
-            # Reverse: limit <= i or limit < i
-            if (isinstance(op, (ast.LtE, ast.Lt)) and self._is_name(test.comparators[0], inc_var) and stride < 0):
+            # Reverse: limit <= i → range(start, limit - 1, -1)
+            if (isinstance(op, ast.LtE) and self._is_name(test.comparators[0], inc_var) and stride < 0):
+                return ast.BinOp(left=test.left, op=ast.Sub(), right=ast.Constant(value=1))
+            # Reverse: limit < i → range(start, limit, -1)
+            if (isinstance(op, ast.Lt) and self._is_name(test.comparators[0], inc_var) and stride < 0):
                 return test.left
 
         # greater(limit, i) → i < limit (forward)
@@ -363,8 +384,8 @@ class LambdaFoldTransformer(ast.NodeTransformer):
                 # i <= limit → range(start, limit + 1)
                 return ast.BinOp(left=inner.args[1], op=ast.Add(), right=ast.Constant(value=1))
             if self._is_name(inner.args[1], inc_var) and stride < 0:
-                # not greater(limit, i) → i >= limit (reverse)
-                return inner.args[0]
+                # not greater(limit, i) → i >= limit → range(start, limit - 1, -1)
+                return ast.BinOp(left=inner.args[0], op=ast.Sub(), right=ast.Constant(value=1))
 
         # flip(greater(i, limit)) → i <= limit
         if (self._is_call(test, 'flip', 1) and self._is_call(test.args[0], 'greater', 2)):
@@ -388,24 +409,67 @@ class LambdaFoldTransformer(ast.NodeTransformer):
         return None
 
     def _build_range(self, start_val, limit_node, stride):
-        """Build a range() call from start value, limit node, and stride."""
+        """Build a range() call. start_val can be int, AST node, or None (=0)."""
+        if isinstance(start_val, int):
+            start_node = ast.Constant(value=start_val) if start_val != 0 else None
+        elif isinstance(start_val, ast.AST):
+            start_node = copy.deepcopy(start_val)
+        else:
+            start_node = None  # defaults to 0
+
         if stride == 1:
-            if start_val is None or start_val == 0:
+            if start_node is None:
                 return ast.Call(func=ast.Name(id='range', ctx=ast.Load()),
                                args=[limit_node], keywords=[])
             else:
                 return ast.Call(func=ast.Name(id='range', ctx=ast.Load()),
-                               args=[ast.Constant(value=start_val), limit_node], keywords=[])
-        elif stride == -1:
-            start_node = ast.Constant(value=start_val) if start_val is not None else limit_node
-            return ast.Call(func=ast.Name(id='range', ctx=ast.Load()),
-                           args=[start_node, limit_node, ast.Constant(value=-1)], keywords=[])
+                               args=[start_node, limit_node], keywords=[])
         else:
-            start = ast.Constant(value=start_val if start_val is not None else 0)
+            s = start_node if start_node is not None else ast.Constant(value=0)
             return ast.Call(func=ast.Name(id='range', ctx=ast.Load()),
-                           args=[start, limit_node, ast.Constant(value=stride)], keywords=[])
+                           args=[s, limit_node, ast.Constant(value=stride)], keywords=[])
+
+    def _limit_uses_mutable_size(self, limit_node, loop_body):
+        """Reject loops where limit depends on len/size of a collection modified in body."""
+        # Find all len(x)/size(x) calls in the limit expression
+        size_vars = set()
+        for n in ast.walk(limit_node):
+            if (isinstance(n, ast.Call) and isinstance(n.func, ast.Name)
+                    and n.func.id in ('len', 'size') and len(n.args) == 1
+                    and isinstance(n.args[0], ast.Name)):
+                size_vars.add(n.args[0].id)
+        if not size_vars:
+            return False
+        # Check if any of those variables are assigned in the loop body
+        assigned = self._get_assigned_vars(loop_body)
+        return bool(size_vars & assigned)
+
+    def _is_write_before_read(self, stmts, var):
+        """Check if var is unconditionally assigned before any read in stmts.
+
+        Returns True if var is a loop-local temporary (written first, then used).
+        This detects inner loop counters like `c = 0; while c < n: ...` that should
+        NOT be promoted to fold accumulators.
+        """
+        for s in stmts:
+            if isinstance(s, ast.Assign):
+                # Check if var is read in the RHS before being written
+                for n in ast.walk(s.value):
+                    if isinstance(n, ast.Name) and n.id == var and isinstance(n.ctx, ast.Load):
+                        return False  # Read before write
+                # Check if var is written in this assignment
+                for t in s.targets:
+                    if isinstance(t, ast.Name) and t.id == var:
+                        return True  # Write before any read
+            # Any other statement that reads var means it's not write-before-read
+            for n in ast.walk(s):
+                if isinstance(n, ast.Name) and n.id == var and isinstance(n.ctx, ast.Load):
+                    return False
+        return False  # Never written — not write-before-read
 
     def _find_init_in_body(self, body, while_idx, var_name):
+        """Find init assignment for var_name before while_idx. Returns (index, value).
+        Value is int for constants, AST node for expressions, None if not found."""
         for j in range(while_idx - 1, -1, -1):
             s = body[j]
             if (isinstance(s, ast.Assign) and len(s.targets) == 1
@@ -418,5 +482,6 @@ class LambdaFoldTransformer(ast.NodeTransformer):
                         return (j, 0)
                     if v.id == 'ONE':
                         return (j, 1)
-                return (j, None)
+                # Return the AST node for non-constant expressions
+                return (j, v)
         return None

@@ -1840,11 +1840,12 @@ def verify_17829a00(I: Grid) -> Grid:
                     x52 = uppermost(x44)
                     x53 = lowermost(x45)
                     x54 = frozenset()
-                    x55 = x52
-                    while flip(greater(x55, x53)):
+
+                    def _17829a00_fold_1844_0(x54, x55):
                         x56 = astuple(x55, x42)
                         x54 = insert(x56, x54)
-                        x55 = increment(x55)
+                        return x54
+                    x54 = fold(range(x52, x53 + 1), x54, _17829a00_fold_1844_0)
                     x32 = fill(x32, x4, x54)
             return x32
         x32 = fold(range(x1), x32, _17829a00_fold_1805_2)
@@ -2041,11 +2042,12 @@ def verify_18447a8d(I: Grid) -> Grid:
 
     def _18447a8d_fold_2014_0(x4, x5):
         x6 = T
-        x7 = 0
-        while x7 < x1:
+
+        def _18447a8d_fold_2045_0(x6, x7):
             if I[x5][x7] != SEVEN:
                 x6 = F
-            x7 = x7 + 1
+            return x6
+        x6 = fold(range(x1), x6, _18447a8d_fold_2045_0)
         x4.append(x6)
         return x4
     x4 = fold(range(x0), x4, _18447a8d_fold_2014_0)
@@ -2067,21 +2069,25 @@ def verify_18447a8d(I: Grid) -> Grid:
         x14 = []
         x15 = []
         x16 = ZERO
-        x17 = x12
-        while x17 < x13:
+
+        def _18447a8d_fold_2071_1(_state, x17):
+            (x14, x15, x16) = _state
             x18 = 0
             x19 = 0
-            x20 = 0
-            while x20 < x1:
+
+            def _18447a8d_fold_2075_2(_state, x20):
+                (x16, x18, x19) = _state
                 if I[x17][x20] == EIGHT:
                     x18 = x18 + 1
                 elif I[x17][x20] != SEVEN:
                     x19 = x19 + 1
                     x16 = I[x17][x20]
-                x20 = x20 + 1
+                return (x16, x18, x19)
+            (x16, x18, x19) = fold(range(x1), (x16, x18, x19), _18447a8d_fold_2075_2)
             x14.append(x18)
             x15.append(x19)
-            x17 = x17 + 1
+            return (x14, x15, x16)
+        (x14, x15, x16) = fold(range(x12, x13), (x14, x15, x16), _18447a8d_fold_2071_1)
         x10.append((tuple(x14), tuple(x15), x16))
         return x10
     x10 = fold(range(len(x3)), x10, _18447a8d_fold_2036_1)
@@ -2090,10 +2096,11 @@ def verify_18447a8d(I: Grid) -> Grid:
     while x22 < len(x10):
         x23 = x10[x22][0]
         x24 = []
-        x25 = 0
-        while x25 < len(x23):
+
+        def _18447a8d_fold_2094_3(x24, x25):
             x24.append(x2 - x23[x25])
-            x25 = x25 + 1
+            return x24
+        x24 = fold(range(len(x23)), x24, _18447a8d_fold_2094_3)
         x26 = tuple(x24)
         x27 = 0
         x28 = ZERO
@@ -2111,10 +2118,11 @@ def verify_18447a8d(I: Grid) -> Grid:
         (x29, x30) = _state
         if x4[x31]:
             x32 = []
-            x33 = 0
-            while x33 < x1:
+
+            def _18447a8d_fold_2115_4(x32, x33):
                 x32.append(SEVEN)
-                x33 = x33 + 1
+                return x32
+            x32 = fold(range(x1), x32, _18447a8d_fold_2115_4)
             x29.append(tuple(x32))
         else:
             x34 = x10[x30][0]
@@ -2123,18 +2131,21 @@ def verify_18447a8d(I: Grid) -> Grid:
             x37 = x21[x30]
             x38 = x2 - x36
             x39 = []
-            x40 = 0
-            while x40 < x36:
+
+            def _18447a8d_fold_2127_5(x39, x40):
                 x39.append(EIGHT)
-                x40 = x40 + 1
-            x41 = 0
-            while x41 < x38:
+                return x39
+            x39 = fold(range(x36), x39, _18447a8d_fold_2127_5)
+
+            def _18447a8d_fold_2131_6(x39, x41):
                 x39.append(x37)
-                x41 = x41 + 1
-            x42 = 0
-            while x42 < x1 - x2:
+                return x39
+            x39 = fold(range(x38), x39, _18447a8d_fold_2131_6)
+
+            def _18447a8d_fold_2135_7(x39, x42):
                 x39.append(SEVEN)
-                x42 = x42 + 1
+                return x39
+            x39 = fold(range(x1 - x2), x39, _18447a8d_fold_2135_7)
             x29.append(tuple(x39))
             if x31 + 1 < x0 and x4[x31 + 1]:
                 x30 = x30 + 1
@@ -5395,11 +5406,12 @@ def verify_2ccd9fef(I: Grid) -> Grid:
         if equality(x7, ZERO):
             x8 = divide(x0, x6)
             x9 = T
-            x10 = ONE
-            while x10 < x6:
+
+            def _2ccd9fef_fold_5399_0(x9, x10):
                 if I[multiply(x10, x8)] != x2:
                     x9 = F
-                x10 = increment(x10)
+                return x9
+            x9 = fold(range(1, x6), x9, _2ccd9fef_fold_5399_0)
             if x9:
                 x3 = x8
                 x4 = x1
@@ -5415,12 +5427,13 @@ def verify_2ccd9fef(I: Grid) -> Grid:
             if equality(x7, ZERO):
                 x8 = divide(x1, x6)
                 x9 = T
-                x10 = ONE
-                while x10 < x6:
+
+                def _2ccd9fef_fold_5419_1(x9, x10):
                     x13 = tuple((I[k][multiply(x10, x8)] for k in range(x0)))
                     if x13 != tuple(x12):
                         x9 = F
-                    x10 = increment(x10)
+                    return x9
+                x9 = fold(range(1, x6), x9, _2ccd9fef_fold_5419_1)
                 if x9:
                     x3 = x0
                     x4 = x8
@@ -5460,8 +5473,8 @@ def verify_2ccd9fef(I: Grid) -> Grid:
     def _2ccd9fef_fold_5386_3(x27, x28):
         if x28 != x23:
             x29 = ZERO
-            x30 = ZERO
-            while x30 < x3:
+
+            def _2ccd9fef_fold_5464_2(x29, x30):
                 x31 = ZERO
                 while x31 < x4:
                     x32 = index(x17[x28], astuple(x30, x31))
@@ -5469,7 +5482,8 @@ def verify_2ccd9fef(I: Grid) -> Grid:
                     if x32 != x33:
                         x29 = increment(x29)
                     x31 = increment(x31)
-                x30 = increment(x30)
+                return x29
+            x29 = fold(range(x3), x29, _2ccd9fef_fold_5464_2)
             x27 = x27 + ((x29, x28),)
         return x27
     x27 = fold(range(x16), x27, _2ccd9fef_fold_5386_3)
@@ -5477,11 +5491,12 @@ def verify_2ccd9fef(I: Grid) -> Grid:
 
     def _2ccd9fef_fold_5403_4(x27, x35):
         x36 = x35
-        x37 = increment(x35)
-        while x37 < x34:
+
+        def _2ccd9fef_fold_5481_3(x36, x37):
             if x27[x37][ZERO] < x27[x36][ZERO]:
                 x36 = x37
-            x37 = increment(x37)
+            return x36
+        x36 = fold(range(increment(x35), x34), x36, _2ccd9fef_fold_5481_3)
         if x36 != x35:
             x38 = x27[x35]
             x27 = x27[:x35] + (x27[x36],) + x27[increment(x35):x36] + (x38,) + x27[increment(x36):]
@@ -5515,10 +5530,12 @@ def verify_2ccd9fef(I: Grid) -> Grid:
         x51 = x49[x50]
         x52 = ZERO
         x53 = ZERO
-        x54 = ZERO
-        while x54 < x3:
-            x55 = ZERO
-            while x55 < x4:
+
+        def _2ccd9fef_fold_5519_4(_state, x54):
+            (x52, x53) = _state
+
+            def _2ccd9fef_fold_5521_5(_state, x55):
+                (x52, x53) = _state
                 x56 = index(x42, astuple(x54, x55))
                 x57 = index(x26, astuple(x54, x55))
                 if equality(x56, x51):
@@ -5526,12 +5543,14 @@ def verify_2ccd9fef(I: Grid) -> Grid:
                 x58 = index(x41, astuple(x54, x55))
                 if both(equality(x56, x51), both(x56 != x58, x58 != x57)):
                     x52 = increment(x52)
-                x55 = increment(x55)
-            x54 = increment(x54)
+                return (x52, x53)
+            (x52, x53) = fold(range(x4), (x52, x53), _2ccd9fef_fold_5521_5)
+            return (x52, x53)
+        (x52, x53) = fold(range(x3), (x52, x53), _2ccd9fef_fold_5519_4)
         if both(equality(x52, x53), greater(x52, ZERO)):
             x59 = None
-            x60 = ZERO
-            while x60 < x3:
+
+            def _2ccd9fef_fold_5534_6(x59, x60):
                 x61 = ZERO
                 while x61 < x4:
                     x62 = index(x42, astuple(x60, x61))
@@ -5540,7 +5559,8 @@ def verify_2ccd9fef(I: Grid) -> Grid:
                     if both(equality(x62, x51), both(x62 != x63, x63 != x64)):
                         x59 = x63
                     x61 = increment(x61)
-                x60 = increment(x60)
+                return x59
+            x59 = fold(range(x3), x59, _2ccd9fef_fold_5534_6)
             if x59 is not None:
                 x43 = (x51, x59)
         return x43
@@ -5570,18 +5590,19 @@ def verify_2ccd9fef(I: Grid) -> Grid:
     while x75 < x73:
         x76 = x72[x75]
         x77 = ()
-        x78 = ZERO
-        while x78 < x34:
+
+        def _2ccd9fef_fold_5574_7(x77, x78):
             x79 = frozenset()
             x80 = x39[x78]
-            x81 = ZERO
-            while x81 < x3:
+
+            def _2ccd9fef_fold_5578_8(x79, x81):
                 x82 = ZERO
                 while x82 < x4:
                     if equality(index(x80, astuple(x81, x82)), x76):
                         x79 = insert(astuple(x81, x82), x79)
                     x82 = increment(x82)
-                x81 = increment(x81)
+                return x79
+            x79 = fold(range(x3), x79, _2ccd9fef_fold_5578_8)
             if x43 is not None:
                 x83 = None
                 if equality(x76, x43[ZERO]):
@@ -5589,16 +5610,19 @@ def verify_2ccd9fef(I: Grid) -> Grid:
                 elif equality(x76, x43[ONE]):
                     x83 = x43[ZERO]
                 if x83 is not None:
-                    x84 = ZERO
-                    while x84 < x3:
-                        x85 = ZERO
-                        while x85 < x4:
+
+                    def _2ccd9fef_fold_5593_9(x79, x84):
+
+                        def _2ccd9fef_fold_5595_10(x79, x85):
                             if equality(index(x80, astuple(x84, x85)), x83):
                                 x79 = insert(astuple(x84, x85), x79)
-                            x85 = increment(x85)
-                        x84 = increment(x84)
+                            return x79
+                        x79 = fold(range(x4), x79, _2ccd9fef_fold_5595_10)
+                        return x79
+                    x79 = fold(range(x3), x79, _2ccd9fef_fold_5593_9)
             x77 = x77 + (x79,)
-            x78 = increment(x78)
+            return x77
+        x77 = fold(range(x34), x77, _2ccd9fef_fold_5574_7)
         x86 = x77[subtract(x34, TWO)]
         x87 = x77[subtract(x34, ONE)]
         if not x87:
@@ -7842,10 +7866,12 @@ def verify_3ad05f52(I: Grid) -> Grid:
     def _3ad05f52_find_structures(I, x0, x1):
         x2 = set()
         x3 = []
-        x4 = 0
-        while x4 < x0:
-            x5 = 0
-            while x5 < x1:
+
+        def _3ad05f52_fold_7870_0(_state, x4):
+            (x2, x3) = _state
+
+            def _3ad05f52_fold_7872_1(_state, x5):
+                (x2, x3) = _state
                 if I[x4][x5] == EIGHT and (x4, x5) not in x2:
                     x6 = set()
                     x7 = [(x4, x5)]
@@ -7867,14 +7893,16 @@ def verify_3ad05f52(I: Grid) -> Grid:
                         x8 = x8 + 1
                     x2 = x2 | x6
                     x3.append(x6)
-                x5 = x5 + 1
-            x4 = x4 + 1
+                return (x2, x3)
+            (x2, x3) = fold(range(x1), (x2, x3), _3ad05f52_fold_7872_1)
+            return (x2, x3)
+        (x2, x3) = fold(range(x0), (x2, x3), _3ad05f52_fold_7870_0)
         return x3
 
     def _3ad05f52_bbox_inside(x0, x1, x2, x3):
         x4 = set()
-        x5 = 0
-        while x5 < len(x0):
+
+        def _3ad05f52_fold_7901_2(x4, x5):
             x6 = x0[x5]
             x7 = x1
             x8 = 0
@@ -7904,7 +7932,8 @@ def verify_3ad05f52(I: Grid) -> Grid:
                         x4.add((x16, x17))
                     x17 = x17 + 1
                 x16 = x16 + 1
-            x5 = x5 + 1
+            return x4
+        x4 = fold(range(len(x0)), x4, _3ad05f52_fold_7901_2)
         return x4
 
     def _3ad05f52_flood(x0, x1, x2, x3, x4):
@@ -7924,8 +7953,9 @@ def verify_3ad05f52(I: Grid) -> Grid:
         while x10 < len(x6):
             x11 = x6[x10]
             x12 = ((-1, 0), (1, 0), (0, -1), (0, 1))
-            x13 = 0
-            while x13 < 4:
+
+            def _3ad05f52_fold_7952_3(_state, x13):
+                (x5, x6) = _state
                 x14 = x11[0] + x12[x13][0]
                 x15 = x11[1] + x12[x13][1]
                 if x14 >= 0 and x14 < x2 and (x15 >= 0) and (x15 < x3):
@@ -7933,7 +7963,8 @@ def verify_3ad05f52(I: Grid) -> Grid:
                     if x16 not in x5 and x16 in x1:
                         x5.add(x16)
                         x6.append(x16)
-                x13 = x13 + 1
+                return (x5, x6)
+            (x5, x6) = fold(range(4), (x5, x6), _3ad05f52_fold_7952_3)
             x10 = x10 + 1
         return x5
     x0 = height(I)
@@ -7965,10 +7996,11 @@ def verify_3ad05f52(I: Grid) -> Grid:
                         x20 = []
                         while x18 >= 0 and x18 < x0 and (x19 >= 0) and (x19 < x1):
                             if I[x18][x19] == EIGHT:
-                                x21 = 0
-                                while x21 < len(x20):
+
+                                def _3ad05f52_fold_7993_4(x7, x21):
                                     x7.add(x20[x21])
-                                    x21 = x21 + 1
+                                    return x7
+                                x7 = fold(range(len(x20)), x7, _3ad05f52_fold_7993_4)
                                 x7.add(x17)
                                 break
                             x20.append((x18, x19))
@@ -10729,28 +10761,31 @@ def verify_4ff4c9da(I: Grid) -> Grid:
     def _4ff4c9da_find_sep_rows(grid):
         x0 = height(grid)
         x1 = []
-        k = 0
-        while k < x0:
+
+        def _4ff4c9da_fold_10757_0(x1, k):
             x2 = set(grid[k])
             if len(x2) == 1:
                 x1.append(k)
-            k = k + 1
+            return x1
+        x1 = fold(range(x0), x1, _4ff4c9da_fold_10757_0)
         return tuple(x1)
 
     def _4ff4c9da_find_sep_cols(grid):
         x0 = height(grid)
         x1 = width(grid)
         x2 = []
-        c = 0
-        while c < x1:
+
+        def _4ff4c9da_fold_10769_1(x2, c):
             x3 = set()
-            r = 0
-            while r < x0:
+
+            def _4ff4c9da_fold_10772_2(x3, r):
                 x3.add(grid[r][c])
-                r = r + 1
+                return x3
+            x3 = fold(range(x0), x3, _4ff4c9da_fold_10772_2)
             if len(x3) == 1:
                 x2.append(c)
-            c = c + 1
+            return x2
+        x2 = fold(range(x1), x2, _4ff4c9da_fold_10769_1)
         return tuple(x2)
 
     def _4ff4c9da_compute_ranges(seps, total):
@@ -10759,43 +10794,48 @@ def verify_4ff4c9da(I: Grid) -> Grid:
         x0.add(total)
         x1 = sorted(x0)
         x2 = []
-        k = 0
-        while k < len(x1) - 1:
+
+        def _4ff4c9da_fold_10787_3(x2, k):
             x3 = x1[k] + 1
             x4 = x1[k + 1]
             if x4 > x3:
                 x2.append((x3, x4))
-            k = k + 1
+            return x2
+        x2 = fold(range(len(x1) - 1), x2, _4ff4c9da_fold_10787_3)
         return tuple(x2)
 
     def _4ff4c9da_extract_block(grid, rr, cr):
         x0 = []
-        r = rr[0]
-        while r < rr[1]:
+
+        def _4ff4c9da_fold_10798_4(x0, r):
             x1 = []
-            c = cr[0]
-            while c < cr[1]:
+
+            def _4ff4c9da_fold_10801_5(x1, c):
                 x1.append(grid[r][c])
-                c = c + 1
+                return x1
+            x1 = fold(range(cr[0], cr[1]), x1, _4ff4c9da_fold_10801_5)
             x0.append(tuple(x1))
-            r = r + 1
+            return x0
+        x0 = fold(range(rr[0], rr[1]), x0, _4ff4c9da_fold_10798_4)
         return tuple(x0)
 
     def _4ff4c9da_block_mask(block, repl_color):
         x0 = []
-        r = 0
-        while r < len(block):
+
+        def _4ff4c9da_fold_10811_6(x0, r):
             x1 = []
-            c = 0
-            while c < len(block[r]):
+
+            def _4ff4c9da_fold_10814_7(x1, c):
                 x2 = block[r][c]
                 if x2 == repl_color or x2 == 8:
                     x1.append(1)
                 else:
                     x1.append(0)
-                c = c + 1
+                return x1
+            x1 = fold(range(len(block[r])), x1, _4ff4c9da_fold_10814_7)
             x0.append(tuple(x1))
-            r = r + 1
+            return x0
+        x0 = fold(range(len(block)), x0, _4ff4c9da_fold_10811_6)
         return tuple(x0)
 
     def _4ff4c9da_has_eight(block):
@@ -10811,51 +10851,60 @@ def verify_4ff4c9da(I: Grid) -> Grid:
 
     def _4ff4c9da_eight_positions(block):
         x0 = set()
-        r = 0
-        while r < len(block):
-            c = 0
-            while c < len(block[r]):
+
+        def _4ff4c9da_fold_10839_8(x0, r):
+
+            def _4ff4c9da_fold_10841_9(x0, c):
                 if block[r][c] == 8:
                     x0.add((r, c))
-                c = c + 1
-            r = r + 1
+                return x0
+            x0 = fold(range(len(block[r])), x0, _4ff4c9da_fold_10841_9)
+            return x0
+        x0 = fold(range(len(block)), x0, _4ff4c9da_fold_10839_8)
         return frozenset(x0)
 
     def _4ff4c9da_sorted_row_col_counts(block, repl_color):
         x0 = []
         r = 0
-        while r < len(block):
+
+        def _4ff4c9da_fold_10851_10(x0, r):
             x1 = 0
-            c = 0
-            while c < len(block[r]):
+
+            def _4ff4c9da_fold_10854_11(x1, c):
                 if block[r][c] == repl_color or block[r][c] == 8:
                     x1 = x1 + 1
-                c = c + 1
+                return x1
+            x1 = fold(range(len(block[r])), x1, _4ff4c9da_fold_10854_11)
             x0.append(x1)
-            r = r + 1
+            return x0
+        x0 = fold(range(len(block)), x0, _4ff4c9da_fold_10851_10)
         x2 = []
-        c = 0
-        while c < len(block[0]):
+
+        def _4ff4c9da_fold_10862_12(x2, c):
             x3 = 0
-            r = 0
-            while r < len(block):
+
+            def _4ff4c9da_fold_10865_13(x3, r):
                 if block[r][c] == repl_color or block[r][c] == 8:
                     x3 = x3 + 1
-                r = r + 1
+                return x3
+            x3 = fold(range(len(block)), x3, _4ff4c9da_fold_10865_13)
             x2.append(x3)
-            c = c + 1
+            return x2
+        x2 = fold(range(len(block[0])), x2, _4ff4c9da_fold_10862_12)
         return (tuple(sorted(x0)), tuple(sorted(x2)))
 
     def _4ff4c9da_repl_positions(block, repl_color):
         x0 = set()
-        r = 0
-        while r < len(block):
-            c = 0
-            while c < len(block[r]):
+
+        def _4ff4c9da_fold_10876_14(x0, r):
+
+            def _4ff4c9da_fold_10878_15(x0, c):
                 if block[r][c] == repl_color:
                     x0.add((r, c))
-                c = c + 1
-            r = r + 1
+                return x0
+            x0 = fold(range(len(block[r])), x0, _4ff4c9da_fold_10878_15)
+            return x0
+        x0 = fold(range(len(block)), x0, _4ff4c9da_fold_10876_14)
         return frozenset(x0)
     x0 = height(I)
     x1 = width(I)
@@ -10864,37 +10913,44 @@ def verify_4ff4c9da(I: Grid) -> Grid:
     x4 = I[x2[0]][0]
     x5 = set()
     r = 0
-    while r < x0:
-        c = 0
-        while c < x1:
+
+    def _4ff4c9da_fold_10891_16(x5, r):
+
+        def _4ff4c9da_fold_10893_17(x5, c):
             x6 = I[r][c]
             if x6 != 8 and x6 != x4:
                 x5.add(x6)
-            c = c + 1
-        r = r + 1
+            return x5
+        x5 = fold(range(x1), x5, _4ff4c9da_fold_10893_17)
+        return x5
+    x5 = fold(range(x0), x5, _4ff4c9da_fold_10891_16)
     x7 = max(x5)
     x8 = _4ff4c9da_compute_ranges(x2, x0)
     x9 = _4ff4c9da_compute_ranges(x3, x1)
     x10 = []
-    bi = 0
-    while bi < len(x8):
-        bj = 0
-        while bj < len(x9):
+
+    def _4ff4c9da_fold_10904_18(x10, bi):
+
+        def _4ff4c9da_fold_10906_19(x10, bj):
             x11 = _4ff4c9da_extract_block(I, x8[bi], x9[bj])
             x12 = _4ff4c9da_block_mask(x11, x7)
             x13 = _4ff4c9da_has_eight(x11)
             x14 = _4ff4c9da_eight_positions(x11)
             x10.append((bi, bj, x11, x12, x13, x14))
-            bj = bj + 1
-        bi = bi + 1
+            return x10
+        x10 = fold(range(len(x9)), x10, _4ff4c9da_fold_10906_19)
+        return x10
+    x10 = fold(range(len(x8)), x10, _4ff4c9da_fold_10904_18)
     x15 = {}
     k = 0
-    while k < len(x10):
+
+    def _4ff4c9da_fold_10916_20(x15, k):
         x16 = x10[k][3]
         if x16 not in x15:
             x15[x16] = []
         x15[x16].append(k)
-        k = k + 1
+        return x15
+    x15 = fold(range(len(x10)), x15, _4ff4c9da_fold_10916_20)
     x17 = {}
 
     def _4ff4c9da_for_fold_10819_0(k, x16):
@@ -10902,11 +10958,13 @@ def verify_4ff4c9da(I: Grid) -> Grid:
         if len(x18) > 1:
             x19 = set()
             k = 0
-            while k < len(x18):
+
+            def _4ff4c9da_fold_10929_21(x19, k):
                 x20 = x10[x18[k]][5]
                 for pos in x20:
                     x19.add(pos)
-                k = k + 1
+                return x19
+            x19 = fold(range(len(x18)), x19, _4ff4c9da_fold_10929_21)
             if len(x19) > 0:
                 k = 0
                 while k < len(x18):
@@ -10916,38 +10974,46 @@ def verify_4ff4c9da(I: Grid) -> Grid:
     k = fold(totuple(x15), k, _4ff4c9da_for_fold_10819_0)
     x21 = []
     k = 0
-    while k < len(x10):
+
+    def _4ff4c9da_fold_10943_22(x21, k):
         x16 = x10[k][3]
         if x10[k][4] and len(x15[x16]) == 1:
             x21.append(k)
-        k = k + 1
-    k = 0
-    while k < len(x21):
+        return x21
+    x21 = fold(range(len(x10)), x21, _4ff4c9da_fold_10943_22)
+
+    def _4ff4c9da_fold_10949_23(x17, k):
         x22 = x21[k]
         x23 = _4ff4c9da_sorted_row_col_counts(x10[x22][2], x7)
         x24 = []
         j = 0
-        while j < len(x10):
+
+        def _4ff4c9da_fold_10954_24(x24, j):
             if j != x22 and (not x10[j][4]):
                 x25 = _4ff4c9da_sorted_row_col_counts(x10[j][2], x7)
                 if x25 == x23:
                     x24.append(j)
-            j = j + 1
+            return x24
+        x24 = fold(range(len(x10)), x24, _4ff4c9da_fold_10954_24)
         if len(x24) > 0:
             x26 = set(x10[x22][5])
-            j = 0
-            while j < len(x24):
+
+            def _4ff4c9da_fold_10963_25(x17, j):
                 x27 = _4ff4c9da_repl_positions(x10[x24[j]][2], x7)
                 x17[x24[j]] = x27
-                j = j + 1
+                return x17
+            x17 = fold(range(len(x24)), x17, _4ff4c9da_fold_10963_25)
             if x22 not in x17:
                 x17[x22] = frozenset(x26)
-        k = k + 1
+        return x17
+    x17 = fold(range(len(x21)), x17, _4ff4c9da_fold_10949_23)
     x28 = []
     r = 0
-    while r < x0:
+
+    def _4ff4c9da_fold_10972_26(x28, r):
         x28.append(list(I[r]))
-        r = r + 1
+        return x28
+    x28 = fold(range(x0), x28, _4ff4c9da_fold_10972_26)
     for x29 in x17:
         x30 = x10[x29]
         (x31, x32) = x30[:2]
@@ -10957,10 +11023,11 @@ def verify_4ff4c9da(I: Grid) -> Grid:
         for pos in x35:
             x28[x33 + pos[0]][x34 + pos[1]] = 8
     x36 = []
-    r = 0
-    while r < x0:
+
+    def _4ff4c9da_fold_10985_27(x36, r):
         x36.append(tuple(x28[r]))
-        r = r + 1
+        return x36
+    x36 = fold(range(x0), x36, _4ff4c9da_fold_10985_27)
     return tuple(x36)
 
 def verify_5034a0b5(I: Grid) -> Grid:
@@ -12300,10 +12367,10 @@ def verify_57edb29d(I: Grid) -> Grid:
         x1 = width(I)
         x2 = [[False] * x1 for _ in range(x0)]
         x3 = []
-        r = 0
-        while r < x0:
-            c = 0
-            while c < x1:
+
+        def _57edb29d_fold_12328_0(x3, r):
+
+            def _57edb29d_fold_12330_1(x3, c):
                 if I[r][c] != 4 and (not x2[r][c]):
                     x4 = [(r, c)]
                     x5 = []
@@ -12323,8 +12390,10 @@ def verify_57edb29d(I: Grid) -> Grid:
                             x4.append((x7, x8 + 1))
                             x4.append((x7, x8 - 1))
                     x3.append(x5)
-                c = c + 1
-            r = r + 1
+                return x3
+            x3 = fold(range(x1), x3, _57edb29d_fold_12330_1)
+            return x3
+        x3 = fold(range(x0), x3, _57edb29d_fold_12328_0)
         return x3
     x0 = _57edb29d_find_regions(I)
     x1 = height(I)
@@ -12348,14 +12417,15 @@ def verify_57edb29d(I: Grid) -> Grid:
                 x8 = x9[1]
             j = j + 1
         x10 = {}
-        j = 0
-        while j < len(x4):
+
+        def _57edb29d_fold_12376_2(x10, j):
             x11 = I[x4[j][0]][x4[j][1]]
             if x11 in x10:
                 x10[x11] = x10[x11] + 1
             else:
                 x10[x11] = 1
-            j = j + 1
+            return x10
+        x10 = fold(range(len(x4)), x10, _57edb29d_fold_12376_2)
         x12 = 0
         x13 = 0
 
@@ -12376,13 +12446,16 @@ def verify_57edb29d(I: Grid) -> Grid:
     x16 = []
     x17 = None
     k = 0
-    while k < len(x3):
+
+    def _57edb29d_fold_12403_3(_state, k):
+        (x15, x16, x17) = _state
         if len(x3[k][5]) == 0:
             x15 = x3[k]
             x17 = k
         else:
             x16.append(x3[k])
-        k = k + 1
+        return (x15, x16, x17)
+    (x15, x16, x17) = fold(range(len(x3)), (x15, x16, x17), _57edb29d_fold_12403_3)
     x18 = x16[0][5][0]
     (x19, x20, x21, x22, x23) = x15[:5]
     x24 = x20 - x19 + 1
@@ -12390,18 +12463,18 @@ def verify_57edb29d(I: Grid) -> Grid:
     x26 = x24 - 2
     x27 = x25 - 2
     x28 = set()
-    k = 0
-    while k < len(x16):
+
+    def _57edb29d_fold_12418_4(x28, k):
         x29 = x16[k]
         (x30, x31, x32, x33) = x29[:4]
         x34 = x31 - x30 + 1
         x35 = x33 - x32 + 1
         x36 = x34 - 2
         x37 = x35 - 2
-        r = 1
-        while r < x34 - 1:
-            c = 1
-            while c < x35 - 1:
+
+        def _57edb29d_fold_12426_5(x28, r):
+
+            def _57edb29d_fold_12428_6(x28, c):
                 x38 = I[x30 + r][x32 + c]
                 if x38 == x18:
                     x39 = r - 1
@@ -12415,15 +12488,18 @@ def verify_57edb29d(I: Grid) -> Grid:
                     if x42 < x44:
                         x44 = x42
                     x28.add((x43, x44))
-                c = c + 1
-            r = r + 1
-        k = k + 1
+                return x28
+            x28 = fold(range(1, x35 - 1), x28, _57edb29d_fold_12428_6)
+            return x28
+        x28 = fold(range(1, x34 - 1), x28, _57edb29d_fold_12426_5)
+        return x28
+    x28 = fold(range(len(x16)), x28, _57edb29d_fold_12418_4)
     x45 = []
-    r = 0
-    while r < x24:
+
+    def _57edb29d_fold_12447_7(x45, r):
         x46 = []
-        c = 0
-        while c < x25:
+
+        def _57edb29d_fold_12450_8(x46, c):
             if r == 0 or r == x24 - 1 or c == 0 or (c == x25 - 1):
                 x46.append(x23)
             else:
@@ -12441,9 +12517,11 @@ def verify_57edb29d(I: Grid) -> Grid:
                     x46.append(x18)
                 else:
                     x46.append(x23)
-            c = c + 1
+            return x46
+        x46 = fold(range(x25), x46, _57edb29d_fold_12450_8)
         x45.append(tuple(x46))
-        r = r + 1
+        return x45
+    x45 = fold(range(x24), x45, _57edb29d_fold_12447_7)
     return tuple(x45)
 
 def verify_5833af48(I: Grid) -> Grid:
@@ -12491,62 +12569,76 @@ def verify_5833af48(I: Grid) -> Grid:
     x7 = ofcolor(I, x6)
     x8 = ()
     r = 0
-    while r < x0:
+
+    def _5833af48_fold_12494_0(x8, r):
         x9 = 0
-        c = 0
-        while c < x1:
+
+        def _5833af48_fold_12497_1(x9, c):
             if I[r][c] == x6:
                 x9 = x9 + 1
-            c = c + 1
+            return x9
+        x9 = fold(range(x1), x9, _5833af48_fold_12497_1)
         x8 = x8 + (x9,)
-        r = r + 1
+        return x8
+    x8 = fold(range(x0), x8, _5833af48_fold_12494_0)
     x10 = maximum(frozenset(x8))
     x11 = x0
     x12 = 0
     r = 0
-    while r < x0:
+
+    def _5833af48_fold_12507_2(_state, r):
+        (x11, x12) = _state
         if x8[r] == x10:
             if r < x11:
                 x11 = r
             if r > x12:
                 x12 = r
-        r = r + 1
+        return (x11, x12)
+    (x11, x12) = fold(range(x0), (x11, x12), _5833af48_fold_12507_2)
     x13 = x1
     x14 = 0
     r = x11
     while r <= x12:
-        c = 0
-        while c < x1:
+
+        def _5833af48_fold_12519_3(_state, c):
+            (x13, x14) = _state
             if I[r][c] == x6:
                 if c < x13:
                     x13 = c
                 if c > x14:
                     x14 = c
-            c = c + 1
+            return (x13, x14)
+        (x13, x14) = fold(range(x1), (x13, x14), _5833af48_fold_12519_3)
         r = r + 1
     x15 = x12 - x11 + 1
     x16 = x14 - x13 + 1
     x17 = ()
     r = 0
-    while r < x11:
+
+    def _5833af48_fold_12531_4(x17, r):
         x18 = F
-        c = 0
-        while c < x1:
+
+        def _5833af48_fold_12534_5(x18, c):
             if I[r][c] != ZERO:
                 x18 = T
-            c = c + 1
+            return x18
+        x18 = fold(range(x1), x18, _5833af48_fold_12534_5)
         if x18:
             x17 = x17 + (r,)
-        r = r + 1
+        return x17
+    x17 = fold(range(x11), x17, _5833af48_fold_12531_4)
     x19 = _5833af48_find_gap_col(I, x17)
     x20 = x0
     x21 = 0
     x22 = x1
     x23 = 0
     r = 0
-    while r < x11:
-        c = 0
-        while c < x19:
+
+    def _5833af48_fold_12547_6(_state, r):
+        (x20, x21, x22, x23) = _state
+
+        def _5833af48_fold_12549_7(_state, c):
+            (x20, x21, x22, x23) = _state
             if I[r][c] != ZERO:
                 if r < x20:
                     x20 = r
@@ -12556,27 +12648,35 @@ def verify_5833af48(I: Grid) -> Grid:
                     x22 = c
                 if c > x23:
                     x23 = c
-            c = c + 1
-        r = r + 1
+            return (x20, x21, x22, x23)
+        (x20, x21, x22, x23) = fold(range(x19), (x20, x21, x22, x23), _5833af48_fold_12549_7)
+        return (x20, x21, x22, x23)
+    (x20, x21, x22, x23) = fold(range(x11), (x20, x21, x22, x23), _5833af48_fold_12547_6)
     x24 = x21 - x20 + 1
     x25 = x23 - x22 + 1
     x26 = frozenset()
     r = 0
-    while r < x24:
-        c = 0
-        while c < x25:
+
+    def _5833af48_fold_12565_8(x26, r):
+
+        def _5833af48_fold_12567_9(x26, c):
             if I[x20 + r][x22 + c] == EIGHT:
                 x26 = insert(astuple(r, c), x26)
-            c = c + 1
-        r = r + 1
+            return x26
+        x26 = fold(range(x25), x26, _5833af48_fold_12567_9)
+        return x26
+    x26 = fold(range(x24), x26, _5833af48_fold_12565_8)
     x27 = x0
     x28 = 0
     x29 = x1
     x30 = 0
     r = 0
-    while r < x11:
-        c = x19 + 1
-        while c < x1:
+
+    def _5833af48_fold_12577_10(_state, r):
+        (x27, x28, x29, x30) = _state
+
+        def _5833af48_fold_12579_11(_state, c):
+            (x27, x28, x29, x30) = _state
             if I[r][c] != ZERO:
                 if r < x27:
                     x27 = r
@@ -12586,20 +12686,24 @@ def verify_5833af48(I: Grid) -> Grid:
                     x29 = c
                 if c > x30:
                     x30 = c
-            c = c + 1
-        r = r + 1
+            return (x27, x28, x29, x30)
+        (x27, x28, x29, x30) = fold(range(x19 + 1, x1), (x27, x28, x29, x30), _5833af48_fold_12579_11)
+        return (x27, x28, x29, x30)
+    (x27, x28, x29, x30) = fold(range(x11), (x27, x28, x29, x30), _5833af48_fold_12577_10)
     x31 = x28 - x27 + 1
     x32 = x30 - x29 + 1
     x33 = ()
-    r = 0
-    while r < x31:
+
+    def _5833af48_fold_12595_12(x33, r):
         x34 = ()
-        c = 0
-        while c < x32:
+
+        def _5833af48_fold_12598_13(x34, c):
             x34 = x34 + (I[x27 + r][x29 + c],)
-            c = c + 1
+            return x34
+        x34 = fold(range(x32), x34, _5833af48_fold_12598_13)
         x33 = x33 + (x34,)
-        r = r + 1
+        return x33
+    x33 = fold(range(x31), x33, _5833af48_fold_12595_12)
     x35 = x15 // x24
     x36 = x16 // x25
     x37 = x31 // x35
@@ -12610,15 +12714,16 @@ def verify_5833af48(I: Grid) -> Grid:
     x40 = canvas(x6, astuple(x15, x16))
     x41 = frozenset()
     x42 = totuple(x39)
-    k = 0
-    while k < size(x39):
+
+    def _5833af48_fold_12614_14(x41, k):
         x43 = x42[k]
         (x44, x45) = x43[:2]
         x46 = x44 * x24
         x47 = x45 * x25
         x48 = shift(x26, astuple(x46, x47))
         x41 = combine(x41, x48)
-        k = k + 1
+        return x41
+    x41 = fold(range(size(x39)), x41, _5833af48_fold_12614_14)
     x49 = fill(x40, EIGHT, x41)
     return x49
 
@@ -13570,111 +13675,135 @@ def verify_5e6bbc0b(I: Grid) -> Grid:
     x9 = equality(x2, ZERO)
     x10 = canvas(ZERO, shape(I))
     if x8:
-        x11 = ZERO
-        while greater(x4, x11):
+
+        def _5e6bbc0b_fold_13574_0(x10, x11):
             x12 = ZERO
             x13 = ZERO
             x14 = equality(x11, x2)
-            x15 = ZERO
-            while greater(x5, x15):
+
+            def _5e6bbc0b_fold_13579_1(_state, x15):
+                (x12, x13) = _state
                 x16 = index(I, astuple(x11, x15))
                 if equality(x16, ONE):
                     x12 = increment(x12)
                 if equality(x16, ZERO):
                     x13 = increment(x13)
-                x15 = increment(x15)
+                return (x12, x13)
+            (x12, x13) = fold(range(x5), (x12, x13), _5e6bbc0b_fold_13579_1)
             if x6:
                 if x14:
                     x10 = fill(x10, EIGHT, frozenset({astuple(x11, ZERO)}))
-                    x17 = ONE
-                    while greater(increment(x12), x17):
+
+                    def _5e6bbc0b_fold_13590_2(x10, x17):
                         x10 = fill(x10, ONE, frozenset({astuple(x11, x17)}))
-                        x17 = increment(x17)
+                        return x10
+                    x10 = fold(range(1, increment(x12)), x10, _5e6bbc0b_fold_13590_2)
                     x18 = increment(x12)
                     x19 = add(x18, x12)
-                    x20 = x18
-                    while greater(x19, x20):
+
+                    def _5e6bbc0b_fold_13596_3(x10, x20):
                         x10 = fill(x10, NINE, frozenset({astuple(x11, x20)}))
-                        x20 = increment(x20)
+                        return x10
+                    x10 = fold(range(x18, x19), x10, _5e6bbc0b_fold_13596_3)
                 else:
-                    x17 = ZERO
-                    while greater(x12, x17):
+
+                    def _5e6bbc0b_fold_13601_4(x10, x17):
                         x10 = fill(x10, ONE, frozenset({astuple(x11, x17)}))
-                        x17 = increment(x17)
+                        return x10
+                    x10 = fold(range(x12), x10, _5e6bbc0b_fold_13601_4)
             elif x14:
                 x10 = fill(x10, EIGHT, frozenset({astuple(x11, decrement(x5))}))
                 x17 = subtract(x5, TWO)
-                x18 = ZERO
-                while greater(x12, x18):
+
+                def _5e6bbc0b_fold_13608_5(_state, x18):
+                    (x10, x17) = _state
                     x10 = fill(x10, ONE, frozenset({astuple(x11, x17)}))
                     x17 = decrement(x17)
-                    x18 = increment(x18)
-                x19 = ZERO
-                while greater(x12, x19):
+                    return (x10, x17)
+                (x10, x17) = fold(range(x12), (x10, x17), _5e6bbc0b_fold_13608_5)
+
+                def _5e6bbc0b_fold_13613_6(_state, x19):
+                    (x10, x17) = _state
                     x10 = fill(x10, NINE, frozenset({astuple(x11, x17)}))
                     x17 = decrement(x17)
-                    x19 = increment(x19)
+                    return (x10, x17)
+                (x10, x17) = fold(range(x12), (x10, x17), _5e6bbc0b_fold_13613_6)
             else:
                 x17 = x13
-                x18 = ZERO
-                while greater(x12, x18):
+
+                def _5e6bbc0b_fold_13620_7(_state, x18):
+                    (x10, x17) = _state
                     x10 = fill(x10, ONE, frozenset({astuple(x11, x17)}))
                     x17 = increment(x17)
-                    x18 = increment(x18)
-            x11 = increment(x11)
+                    return (x10, x17)
+                (x10, x17) = fold(range(x12), (x10, x17), _5e6bbc0b_fold_13620_7)
+            return x10
+        x10 = fold(range(x4), x10, _5e6bbc0b_fold_13574_0)
     else:
-        x11 = ZERO
-        while greater(x5, x11):
+
+        def _5e6bbc0b_fold_13627_8(x10, x11):
             x12 = ZERO
             x13 = ZERO
             x14 = equality(x11, x3)
-            x15 = ZERO
-            while greater(x4, x15):
+
+            def _5e6bbc0b_fold_13632_9(_state, x15):
+                (x12, x13) = _state
                 x16 = index(I, astuple(x15, x11))
                 if equality(x16, ONE):
                     x12 = increment(x12)
                 if equality(x16, ZERO):
                     x13 = increment(x13)
-                x15 = increment(x15)
+                return (x12, x13)
+            (x12, x13) = fold(range(x4), (x12, x13), _5e6bbc0b_fold_13632_9)
             if x9:
                 if x14:
                     x10 = fill(x10, EIGHT, frozenset({astuple(ZERO, x11)}))
-                    x17 = ONE
-                    while greater(increment(x12), x17):
+
+                    def _5e6bbc0b_fold_13643_10(x10, x17):
                         x10 = fill(x10, ONE, frozenset({astuple(x17, x11)}))
-                        x17 = increment(x17)
+                        return x10
+                    x10 = fold(range(1, increment(x12)), x10, _5e6bbc0b_fold_13643_10)
                     x18 = increment(x12)
                     x19 = add(x18, x12)
-                    x20 = x18
-                    while greater(x19, x20):
+
+                    def _5e6bbc0b_fold_13649_11(x10, x20):
                         x10 = fill(x10, NINE, frozenset({astuple(x20, x11)}))
-                        x20 = increment(x20)
+                        return x10
+                    x10 = fold(range(x18, x19), x10, _5e6bbc0b_fold_13649_11)
                 else:
-                    x17 = ZERO
-                    while greater(x12, x17):
+
+                    def _5e6bbc0b_fold_13654_12(x10, x17):
                         x10 = fill(x10, ONE, frozenset({astuple(x17, x11)}))
-                        x17 = increment(x17)
+                        return x10
+                    x10 = fold(range(x12), x10, _5e6bbc0b_fold_13654_12)
             elif x14:
                 x10 = fill(x10, EIGHT, frozenset({astuple(decrement(x4), x11)}))
                 x17 = subtract(x4, TWO)
-                x18 = ZERO
-                while greater(x12, x18):
+
+                def _5e6bbc0b_fold_13661_13(_state, x18):
+                    (x10, x17) = _state
                     x10 = fill(x10, ONE, frozenset({astuple(x17, x11)}))
                     x17 = decrement(x17)
-                    x18 = increment(x18)
-                x19 = ZERO
-                while greater(x12, x19):
+                    return (x10, x17)
+                (x10, x17) = fold(range(x12), (x10, x17), _5e6bbc0b_fold_13661_13)
+
+                def _5e6bbc0b_fold_13666_14(_state, x19):
+                    (x10, x17) = _state
                     x10 = fill(x10, NINE, frozenset({astuple(x17, x11)}))
                     x17 = decrement(x17)
-                    x19 = increment(x19)
+                    return (x10, x17)
+                (x10, x17) = fold(range(x12), (x10, x17), _5e6bbc0b_fold_13666_14)
             else:
                 x17 = x13
-                x18 = ZERO
-                while greater(x12, x18):
+
+                def _5e6bbc0b_fold_13673_15(_state, x18):
+                    (x10, x17) = _state
                     x10 = fill(x10, ONE, frozenset({astuple(x17, x11)}))
                     x17 = increment(x17)
-                    x18 = increment(x18)
-            x11 = increment(x11)
+                    return (x10, x17)
+                (x10, x17) = fold(range(x12), (x10, x17), _5e6bbc0b_fold_13673_15)
+            return x10
+        x10 = fold(range(x5), x10, _5e6bbc0b_fold_13627_8)
     return x10
 
 def verify_5ecac7f7(I: Grid) -> Grid:
@@ -13727,13 +13856,15 @@ def verify_5ffb2104(I: Grid) -> Grid:
         x5 = order(x0, rightmost)
         x6 = len(x5)
         x7 = ()
-        x8 = x6 - 1
-        while x8 >= 0:
+
+        def _5ffb2104_fold_13806_0(x7, x8):
             x7 = x7 + (x5[x8],)
-            x8 = x8 - 1
+            return x7
+        x7 = fold(range(x6 - 1, 0 - 1, -1), x7, _5ffb2104_fold_13806_0)
         x9 = frozenset()
-        x10 = 0
-        while x10 < x6:
+
+        def _5ffb2104_fold_13811_1(_state, x10):
+            (x3, x4, x9) = _state
             x11 = x7[x10]
             x12 = _5ffb2104_can_move_right(x3, x11, x2)
             if x12:
@@ -13744,7 +13875,8 @@ def verify_5ffb2104(I: Grid) -> Grid:
                 x4 = T
             else:
                 x9 = insert(x11, x9)
-            x10 = x10 + 1
+            return (x3, x4, x9)
+        (x3, x4, x9) = fold(range(x6), (x3, x4, x9), _5ffb2104_fold_13811_1)
         x0 = x9
     return x3
 
@@ -13766,13 +13898,13 @@ def verify_60a26a3e(I: Grid) -> Grid:
     x4 = totuple(x3)
     x5 = frozenset()
     x6 = size(x4)
-    x7 = ZERO
-    while x7 < x6:
+
+    def _60a26a3e_fold_13770_0(x5, x7):
         x8 = x4[x7]
         x9 = first(x8)
         x10 = last(x8)
-        x11 = increment(x7)
-        while x11 < x6:
+
+        def _60a26a3e_fold_13775_1(x5, x11):
             x12 = x4[x11]
             x13 = first(x12)
             x14 = last(x12)
@@ -13806,8 +13938,10 @@ def verify_60a26a3e(I: Grid) -> Grid:
                 if equality(x37, ZERO):
                     x38 = connect(astuple(x30, x10), astuple(x31, x10))
                     x5 = combine(x5, x38)
-            x11 = increment(x11)
-        x7 = increment(x7)
+            return x5
+        x5 = fold(range(increment(x7), x6), x5, _60a26a3e_fold_13775_1)
+        return x5
+    x5 = fold(range(x6), x5, _60a26a3e_fold_13770_0)
     x39 = fill(I, ONE, x5)
     return x39
 
@@ -13894,12 +14028,13 @@ def verify_6165ea8f(I: Grid) -> Grid:
     x1 = decrement(x0)
     x2 = height(I)
     x3 = ()
-    x4 = ZERO
-    while greater(x2, x4):
+
+    def _6165ea8f_fold_13975_0(x3, x4):
         x5 = astuple(x4, x1)
         x6 = index(I, x5)
         x3 = branch(equality(x6, ZERO), x3, x3 + (x6,))
-        x4 = increment(x4)
+        return x3
+    x3 = fold(range(x2), x3, _6165ea8f_fold_13975_0)
     x7 = size(x3)
     x8 = astuple(x2, x1)
     x9 = crop(I, ORIGIN, x8)
@@ -13908,8 +14043,8 @@ def verify_6165ea8f(I: Grid) -> Grid:
     x12 = subtract(multiply(x11, THREE), ONE)
     x13 = astuple(x12, x12)
     x14 = canvas(ZERO, x13)
-    x15 = ZERO
-    while greater(x7, x15):
+
+    def _6165ea8f_fold_13989_1(x14, x15):
         x16 = x3[x15]
         x17 = multiply(increment(x15), THREE)
         x18 = increment(x17)
@@ -13919,11 +14054,12 @@ def verify_6165ea8f(I: Grid) -> Grid:
         x21 = product(frozenset({x17, x18}), frozenset({ZERO, ONE}))
         x22 = recolor(x16, x21)
         x14 = paint(x14, x22)
-        x15 = increment(x15)
-    x23 = ZERO
-    while greater(x7, x23):
-        x24 = ZERO
-        while greater(x7, x24):
+        return x14
+    x14 = fold(range(x7), x14, _6165ea8f_fold_13989_1)
+
+    def _6165ea8f_fold_14001_2(x14, x23):
+
+        def _6165ea8f_fold_14003_3(x14, x24):
             if flip(equality(x23, x24)):
                 x25 = x3[x23]
                 x26 = x3[x24]
@@ -13936,8 +14072,10 @@ def verify_6165ea8f(I: Grid) -> Grid:
                 x33 = product(frozenset({x31, increment(x31)}), frozenset({x32, increment(x32)}))
                 x34 = recolor(x30, x33)
                 x14 = paint(x14, x34)
-            x24 = increment(x24)
-        x23 = increment(x23)
+            return x14
+        x14 = fold(range(x7), x14, _6165ea8f_fold_14003_3)
+        return x14
+    x14 = fold(range(x7), x14, _6165ea8f_fold_14001_2)
     return x14
 
 def verify_623ea044(I: Grid) -> Grid:
@@ -14129,75 +14267,85 @@ def verify_6350f1f4(I: Grid) -> Grid:
         x0 = height(I)
         x1 = width(I)
         x2 = ()
-        x3 = 0
-        while x3 < x0:
+
+        def _6350f1f4_fold_14133_0(x2, x3):
             x4 = T
-            x5 = 0
-            while x5 < x1:
+
+            def _6350f1f4_fold_14136_1(x4, x5):
                 x6 = I[x3][x5]
                 if x6 != 0 and x6 != 5:
                     x4 = F
-                x5 = x5 + 1
+                return x4
+            x4 = fold(range(x1), x4, _6350f1f4_fold_14136_1)
             if x4:
                 x2 = x2 + (x3,)
-            x3 = x3 + 1
+            return x2
+        x2 = fold(range(x0), x2, _6350f1f4_fold_14133_0)
         return x2
 
     def _6350f1f4_find_separators_col(I):
         x0 = height(I)
         x1 = width(I)
         x2 = ()
-        x3 = 0
-        while x3 < x1:
+
+        def _6350f1f4_fold_14151_2(x2, x3):
             x4 = T
-            x5 = 0
-            while x5 < x0:
+
+            def _6350f1f4_fold_14154_3(x4, x5):
                 x6 = I[x5][x3]
                 if x6 != 0 and x6 != 5:
                     x4 = F
-                x5 = x5 + 1
+                return x4
+            x4 = fold(range(x0), x4, _6350f1f4_fold_14154_3)
             if x4:
                 x2 = x2 + (x3,)
-            x3 = x3 + 1
+            return x2
+        x2 = fold(range(x1), x2, _6350f1f4_fold_14151_2)
         return x2
 
     def _6350f1f4_get_ranges(seps, total):
         x0 = ()
         x1 = 0
-        x2 = 0
-        while x2 < len(seps):
+
+        def _6350f1f4_fold_14168_4(_state, x2):
+            (x0, x1) = _state
             if seps[x2] > x1:
                 x0 = x0 + ((x1, seps[x2]),)
             x1 = seps[x2] + 1
-            x2 = x2 + 1
+            return (x0, x1)
+        (x0, x1) = fold(range(len(seps)), (x0, x1), _6350f1f4_fold_14168_4)
         if x1 < total:
             x0 = x0 + ((x1, total),)
         return x0
 
     def _6350f1f4_extract_block(I, r0, r1, c0, c1):
         x0 = ()
-        x1 = r0
-        while x1 < r1:
+
+        def _6350f1f4_fold_14180_5(x0, x1):
             x2 = ()
-            x3 = c0
-            while x3 < c1:
+
+            def _6350f1f4_fold_14183_6(x2, x3):
                 x2 = x2 + (I[x1][x3],)
-                x3 = x3 + 1
+                return x2
+            x2 = fold(range(c0, c1), x2, _6350f1f4_fold_14183_6)
             x0 = x0 + (x2,)
-            x1 = x1 + 1
+            return x0
+        x0 = fold(range(r0, r1), x0, _6350f1f4_fold_14180_5)
         return x0
 
     def _6350f1f4_block_non5_colors(block):
         x0 = frozenset()
-        x1 = 0
-        while x1 < len(block):
-            x2 = 0
-            while x2 < len(block[x1]):
+
+        def _6350f1f4_fold_14193_7(x0, x1):
+
+            def _6350f1f4_fold_14195_8(x0, x2):
                 x3 = block[x1][x2]
                 if x3 != 5:
                     x0 = x0 | frozenset({x3})
-                x2 = x2 + 1
-            x1 = x1 + 1
+                return x0
+            x0 = fold(range(len(block[x1])), x0, _6350f1f4_fold_14195_8)
+            return x0
+        x0 = fold(range(len(block)), x0, _6350f1f4_fold_14193_7)
         return x0
 
     def _6350f1f4_block_has_5(block):
@@ -14213,17 +14361,19 @@ def verify_6350f1f4(I: Grid) -> Grid:
 
     def _6350f1f4_block_mostcolor(block):
         x0 = {}
-        x1 = 0
-        while x1 < len(block):
-            x2 = 0
-            while x2 < len(block[x1]):
+
+        def _6350f1f4_fold_14217_9(x0, x1):
+
+            def _6350f1f4_fold_14219_10(x0, x2):
                 x3 = block[x1][x2]
                 if x3 in x0:
                     x0[x3] = x0[x3] + 1
                 else:
                     x0[x3] = 1
-                x2 = x2 + 1
-            x1 = x1 + 1
+                return x0
+            x0 = fold(range(len(block[x1])), x0, _6350f1f4_fold_14219_10)
+            return x0
+        x0 = fold(range(len(block)), x0, _6350f1f4_fold_14217_9)
         x4 = 0
         x5 = 0
         for v in x0:
@@ -14240,26 +14390,29 @@ def verify_6350f1f4(I: Grid) -> Grid:
     x6 = x4[0][1] - x4[0][0]
     x7 = x5[0][1] - x5[0][0]
     x8 = None
-    x9 = 0
-    while x9 < len(x4):
-        x10 = 0
-        while x10 < len(x5):
+
+    def _6350f1f4_fold_14244_11(x8, x9):
+
+        def _6350f1f4_fold_14246_12(x8, x10):
             x11 = _6350f1f4_extract_block(I, x4[x9][0], x4[x9][1], x5[x10][0], x5[x10][1])
             x12 = _6350f1f4_block_non5_colors(x11)
             x13 = _6350f1f4_block_has_5(x11)
             if size(x12) >= 2 and (not x13) and (x8 is None):
                 x8 = x11
-            x10 = x10 + 1
-        x9 = x9 + 1
+            return x8
+        x8 = fold(range(len(x5)), x8, _6350f1f4_fold_14246_12)
+        return x8
+    x8 = fold(range(len(x4)), x8, _6350f1f4_fold_14244_11)
     x14 = _6350f1f4_block_mostcolor(x8)
     x15 = _6350f1f4_block_non5_colors(x8)
     x16 = difference(x15, frozenset({x14}))
     x17 = first(totuple(x16))
     x18 = []
-    x19 = 0
-    while x19 < x0:
+
+    def _6350f1f4_fold_14260_13(x18, x19):
         x18.append([0] * x1)
-        x19 = x19 + 1
+        return x18
+    x18 = fold(range(x0), x18, _6350f1f4_fold_14260_13)
     x20 = 0
     while x20 < len(x4):
         x21 = 0
@@ -14296,10 +14449,11 @@ def verify_6350f1f4(I: Grid) -> Grid:
             x21 = x21 + 1
         x20 = x20 + 1
     x32 = ()
-    x33 = 0
-    while x33 < x0:
+
+    def _6350f1f4_fold_14300_14(x32, x33):
         x32 = x32 + (tuple(x18[x33]),)
-        x33 = x33 + 1
+        return x32
+    x32 = fold(range(x0), x32, _6350f1f4_fold_14300_14)
     return x32
 
 def verify_63613498(I: Grid) -> Grid:
@@ -16452,12 +16606,12 @@ def verify_6ffe8f07(I: Grid) -> Grid:
     x7 = ofcolor(I, ONE)
     x8 = frozenset()
     x9 = set(range(x3, increment(x4)))
-    x10 = increment(x2)
-    while x10 < x5:
+
+    def _6ffe8f07_fold_16549_0(x8, x10):
         x11 = frozenset()
         x12 = tuple(x9)
-        x13 = ZERO
-        while x13 < size(x12):
+
+        def _6ffe8f07_fold_16553_1(x11, x13):
             x14 = x12[x13]
             x15 = astuple(x10, x14)
             x16 = contained(x15, x7)
@@ -16465,16 +16619,18 @@ def verify_6ffe8f07(I: Grid) -> Grid:
                 x9.discard(x14)
             else:
                 x11 = insert(x15, x11)
-            x13 = increment(x13)
+            return x11
+        x11 = fold(range(size(x12)), x11, _6ffe8f07_fold_16553_1)
         x8 = combine(x8, x11)
-        x10 = increment(x10)
+        return x8
+    x8 = fold(range(increment(x2), x5), x8, _6ffe8f07_fold_16549_0)
     x17 = set(range(x3, increment(x4)))
-    x18 = decrement(x1)
-    while x18 >= ZERO:
+
+    def _6ffe8f07_fold_16566_2(x8, x18):
         x19 = frozenset()
         x20 = tuple(x17)
-        x21 = ZERO
-        while x21 < size(x20):
+
+        def _6ffe8f07_fold_16570_3(x19, x21):
             x22 = x20[x21]
             x23 = astuple(x18, x22)
             x24 = contained(x23, x7)
@@ -16482,16 +16638,18 @@ def verify_6ffe8f07(I: Grid) -> Grid:
                 x17.discard(x22)
             else:
                 x19 = insert(x23, x19)
-            x21 = increment(x21)
+            return x19
+        x19 = fold(range(size(x20)), x19, _6ffe8f07_fold_16570_3)
         x8 = combine(x8, x19)
-        x18 = decrement(x18)
+        return x8
+    x8 = fold(range(decrement(x1), ZERO - 1, -1), x8, _6ffe8f07_fold_16566_2)
     x25 = set(range(x1, increment(x2)))
-    x26 = increment(x4)
-    while x26 < x6:
+
+    def _6ffe8f07_fold_16583_4(x8, x26):
         x27 = frozenset()
         x28 = tuple(x25)
-        x29 = ZERO
-        while x29 < size(x28):
+
+        def _6ffe8f07_fold_16587_5(x27, x29):
             x30 = x28[x29]
             x31 = astuple(x30, x26)
             x32 = contained(x31, x7)
@@ -16499,16 +16657,18 @@ def verify_6ffe8f07(I: Grid) -> Grid:
                 x25.discard(x30)
             else:
                 x27 = insert(x31, x27)
-            x29 = increment(x29)
+            return x27
+        x27 = fold(range(size(x28)), x27, _6ffe8f07_fold_16587_5)
         x8 = combine(x8, x27)
-        x26 = increment(x26)
+        return x8
+    x8 = fold(range(increment(x4), x6), x8, _6ffe8f07_fold_16583_4)
     x33 = set(range(x1, increment(x2)))
-    x34 = decrement(x3)
-    while x34 >= ZERO:
+
+    def _6ffe8f07_fold_16600_6(x8, x34):
         x35 = frozenset()
         x36 = tuple(x33)
-        x37 = ZERO
-        while x37 < size(x36):
+
+        def _6ffe8f07_fold_16604_7(x35, x37):
             x38 = x36[x37]
             x39 = astuple(x38, x34)
             x40 = contained(x39, x7)
@@ -16516,9 +16676,11 @@ def verify_6ffe8f07(I: Grid) -> Grid:
                 x33.discard(x38)
             else:
                 x35 = insert(x39, x35)
-            x37 = increment(x37)
+            return x35
+        x35 = fold(range(size(x36)), x35, _6ffe8f07_fold_16604_7)
         x8 = combine(x8, x35)
-        x34 = decrement(x34)
+        return x8
+    x8 = fold(range(decrement(x3), ZERO - 1, -1), x8, _6ffe8f07_fold_16600_6)
     x41 = fill(I, FOUR, x8)
     return x41
 
@@ -16857,10 +17019,12 @@ def verify_753ea09b(I: Grid) -> Grid:
         x2 = {}
         x3 = 0
         x4 = {}
-        r = 0
-        while r < x0:
-            c = 0
-            while c < x1:
+
+        def _753ea09b_fold_16954_0(_state, r):
+            (x2, x3, x4) = _state
+
+            def _753ea09b_fold_16956_1(_state, c):
+                (x2, x3, x4) = _state
                 if grid[r][c] == color and (r, c) not in x2:
                     x3 = x3 + 1
                     x5 = [(r, c)]
@@ -16886,15 +17050,18 @@ def verify_753ea09b(I: Grid) -> Grid:
                             x11 = x11 + 1
                         x7 = x7 + 1
                     x4[x3] = tuple(x6)
-                c = c + 1
-            r = r + 1
+                return (x2, x3, x4)
+            (x2, x3, x4) = fold(range(x1), (x2, x3, x4), _753ea09b_fold_16956_1)
+            return (x2, x3, x4)
+        (x2, x3, x4) = fold(range(x0), (x2, x3, x4), _753ea09b_fold_16954_0)
         return x4
 
     def _753ea09b_bfs_path(cells):
         x0 = set(cells)
         x1 = {}
         k = 0
-        while k < len(cells):
+
+        def _753ea09b_fold_16990_2(x1, k):
             x2 = cells[k]
             x1[x2] = []
             x3 = -1
@@ -16907,7 +17074,8 @@ def verify_753ea09b(I: Grid) -> Grid:
                             x1[x2].append(x5)
                     x4 = x4 + 1
                 x3 = x3 + 1
-            k = k + 1
+            return x1
+        x1 = fold(range(len(cells)), x1, _753ea09b_fold_16990_2)
         x6 = None
         k = 0
         while k < len(cells):
@@ -16923,24 +17091,28 @@ def verify_753ea09b(I: Grid) -> Grid:
         x10 = 0
         while x10 < len(x9):
             x11 = x9[x10]
-            x12 = 0
-            while x12 < len(x1[x11]):
+
+            def _753ea09b_fold_17020_3(_state, x12):
+                (x7, x8, x9) = _state
                 x13 = x1[x11][x12]
                 if x13 not in x7:
                     x7[x13] = x7[x11] + 1
                     x8[x13] = x11
                     x9.append(x13)
-                x12 = x12 + 1
+                return (x7, x8, x9)
+            (x7, x8, x9) = fold(range(len(x1[x11])), (x7, x8, x9), _753ea09b_fold_17020_3)
             x10 = x10 + 1
         x14 = x6
         x15 = 0
-        k = 0
-        while k < len(cells):
+
+        def _753ea09b_fold_17031_4(_state, k):
+            (x14, x15) = _state
             if len(x1[cells[k]]) <= 1:
                 if cells[k] in x7 and x7[cells[k]] > x15:
                     x15 = x7[cells[k]]
                     x14 = cells[k]
-            k = k + 1
+            return (x14, x15)
+        (x14, x15) = fold(range(len(cells)), (x14, x15), _753ea09b_fold_17031_4)
         if x15 == 0:
             x14 = x9[-1]
         x16 = []
@@ -16954,27 +17126,34 @@ def verify_753ea09b(I: Grid) -> Grid:
     def _753ea09b_border_path(p1, p2, h, w):
         x0 = []
         c = 0
-        while c < w:
+
+        def _753ea09b_fold_17050_5(x0, c):
             x0.append((0, c))
-            c = c + 1
+            return x0
+        x0 = fold(range(w), x0, _753ea09b_fold_17050_5)
         r = 1
-        while r < h:
+
+        def _753ea09b_fold_17054_6(x0, r):
             x0.append((r, w - 1))
-            r = r + 1
-        c = w - 2
-        while c >= 0:
+            return x0
+        x0 = fold(range(1, h), x0, _753ea09b_fold_17054_6)
+
+        def _753ea09b_fold_17058_7(x0, c):
             x0.append((h - 1, c))
-            c = c - 1
-        r = h - 2
-        while r > 0:
+            return x0
+        x0 = fold(range(w - 2, 0 - 1, -1), x0, _753ea09b_fold_17058_7)
+
+        def _753ea09b_fold_17062_8(x0, r):
             x0.append((r, 0))
-            r = r - 1
+            return x0
+        x0 = fold(range(h - 2, 0, -1), x0, _753ea09b_fold_17062_8)
         x1 = {}
-        k = 0
-        while k < len(x0):
+
+        def _753ea09b_fold_17067_9(x1, k):
             if x0[k] not in x1:
                 x1[x0[k]] = k
-            k = k + 1
+            return x1
+        x1 = fold(range(len(x0)), x1, _753ea09b_fold_17067_9)
         if p1 not in x1 or p2 not in x1:
             return ()
         x2 = len(x0)
@@ -17000,8 +17179,8 @@ def verify_753ea09b(I: Grid) -> Grid:
     def _753ea09b_ray_cast(polygon, r, c):
         x0 = 0
         x1 = len(polygon)
-        k = 0
-        while k < x1:
+
+        def _753ea09b_fold_17097_10(x0, k):
             x2 = polygon[k]
             x3 = polygon[(k + 1) % x1]
             (x4, x5) = x2[:2]
@@ -17017,7 +17196,8 @@ def verify_753ea09b(I: Grid) -> Grid:
                     x11 = x5 + x10 * (x7 - x5)
                     if x11 > c:
                         x0 = x0 + 1
-            k = k + 1
+            return x0
+        x0 = fold(range(x1), x0, _753ea09b_fold_17097_10)
         return x0 % 2 == 1
     x0 = height(I)
     x1 = width(I)
@@ -17055,8 +17235,9 @@ def verify_753ea09b(I: Grid) -> Grid:
     x20 = None
     x21 = None
     x22 = 0
-    x23 = 0
-    while x23 < 2:
+
+    def _753ea09b_fold_17152_11(_state, x23):
+        (x20, x21, x22) = _state
         if x23 == 0:
             x24 = x19
         else:
@@ -17074,22 +17255,25 @@ def verify_753ea09b(I: Grid) -> Grid:
             x22 = x32
             x20 = list(x18) + list(x30) + list(x24) + list(x31)
             x21 = set(x30) | set(x31)
-        x23 = x23 + 1
+        return (x20, x21, x22)
+    (x20, x21, x22) = fold(range(2), (x20, x21, x22), _753ea09b_fold_17152_11)
     x33 = tuple(x20)
     x34 = list(I)
-    r = 0
-    while r < x0:
+
+    def _753ea09b_fold_17174_12(x34, r):
         x35 = list(x34[r])
-        c = 0
-        while c < x1:
+
+        def _753ea09b_fold_17177_13(x35, c):
             if x35[c] == x2:
                 if _753ea09b_ray_cast(x33, r, c):
                     x35[c] = x10
                 elif (r, c) in x21:
                     x35[c] = x10
-            c = c + 1
+            return x35
+        x35 = fold(range(x1), x35, _753ea09b_fold_17177_13)
         x34[r] = tuple(x35)
-        r = r + 1
+        return x34
+    x34 = fold(range(x0), x34, _753ea09b_fold_17174_12)
     return tuple(x34)
 
 def verify_758abdf0(I: Grid) -> Grid:
@@ -18411,8 +18595,8 @@ def verify_80214e03(I: Grid) -> Grid:
 
     def _80214e03_fold_18124_0(x13, x14):
         x15 = ()
-        x16 = x12 - 1
-        while x16 >= 0:
+
+        def _80214e03_fold_18508_0(x15, x16):
             x17 = x9[x14]
             x18 = x9[x14 + 1]
             x19 = x10[x16]
@@ -18424,7 +18608,8 @@ def verify_80214e03(I: Grid) -> Grid:
                 x24 = remove(ZERO, x23)
                 x22 = first(totuple(x24))
             x15 = x15 + (x22,)
-            x16 = x16 - 1
+            return x15
+        x15 = fold(range(x12 - 1, 0 - 1, -1), x15, _80214e03_fold_18508_0)
         x13 = x13 + (x15,)
         return x13
     x13 = fold(range(x11), x13, _80214e03_fold_18124_0)
@@ -19114,20 +19299,22 @@ def verify_84551f4c(I: Grid) -> Grid:
         x29 = x3[x28]
         (x30, x31, x32) = x29[:3]
         x33 = contained(x28, x10)
-        x34 = ZERO
         x35 = x27
-        while both(x33, x34 < x32):
+
+        def _84551f4c_fold_19119_0(x35, x34):
             x36 = astuple(subtract(x0, ONE), add(x30, x34))
             x35 = fill(x35, x31, frozenset({x36}))
-            x34 = increment(x34)
+            return x35
+        x35 = fold(range(x32), x35, _84551f4c_fold_19119_0)
         x27 = branch(x33, x35, x27)
         x37 = subtract(x0, x32)
-        x38 = x37
         x39 = x27
-        while both(flip(x33), x38 < x0):
+
+        def _84551f4c_fold_19127_1(x39, x38):
             x40 = astuple(x38, x30)
             x39 = fill(x39, x31, frozenset({x40}))
-            x38 = increment(x38)
+            return x39
+        x39 = fold(range(x37, x0), x39, _84551f4c_fold_19127_1)
         x27 = branch(x33, x27, x39)
         return x27
     x27 = fold(range(size(x3)), x27, _84551f4c_fold_18807_2)
@@ -22316,8 +22503,9 @@ def verify_9772c176(I: Grid) -> Grid:
             x24 = decrement(x24)
         x31 = frozenset()
         x32 = subtract(x16, TWO)
-        x33 = increment(x9)
-        while both(greater(x32, ZERO), greater(x1, x33)):
+
+        def _9772c176_fold_22320_0(_state, x33):
+            (x31, x32) = _state
             x34 = halve(subtract(x12, x32))
             x35 = add(x10, x34)
             x36 = subtract(x11, x34)
@@ -22327,7 +22515,8 @@ def verify_9772c176(I: Grid) -> Grid:
                 x31 = insert(x38, x31)
                 x37 = increment(x37)
             x32 = subtract(x32, TWO)
-            x33 = increment(x33)
+            return (x31, x32)
+        (x31, x32) = fold(range(increment(x9), x1), (x31, x32), _9772c176_fold_22320_0)
         x39 = subtract(x17, TWO)
         x40 = sfilter(x7, compose(matcher(last, x10), identity))
         x41 = apply(first, x40)
@@ -22353,8 +22542,9 @@ def verify_9772c176(I: Grid) -> Grid:
             x50 = decrement(x50)
         x56 = frozenset()
         x57 = x39
-        x58 = increment(x11)
-        while both(greater(x57, ZERO), greater(x2, x58)):
+
+        def _9772c176_fold_22357_1(_state, x58):
+            (x56, x57) = _state
             x59 = halve(subtract(subtract(x47, x46), subtract(x57, TWO)))
             x60 = add(x46, x59)
             x61 = subtract(x47, x59)
@@ -22364,7 +22554,8 @@ def verify_9772c176(I: Grid) -> Grid:
                 x56 = insert(x63, x56)
                 x62 = increment(x62)
             x57 = subtract(x57, TWO)
-            x58 = increment(x58)
+            return (x56, x57)
+        (x56, x57) = fold(range(increment(x11), x2), (x56, x57), _9772c176_fold_22357_1)
         x64 = combine(combine(x22, x31), combine(x48, x56))
         x3 = fill(x3, FOUR, x64)
         return x3
@@ -22612,23 +22803,26 @@ def verify_984d8a3e(I: Grid) -> Grid:
     def _984d8a3e_col_mostcommon(grid, col):
         x0 = height(grid)
         x1 = palette(grid)
-        x2 = ZERO
         x3 = ZERO
         x4 = NEG_ONE
         x5 = totuple(x1)
-        while x2 < size(x5):
+
+        def _984d8a3e_fold_22619_0(_state, x2):
+            (x3, x4) = _state
             x6 = x5[x2]
-            x7 = ZERO
             x8 = ZERO
-            while x7 < x0:
+
+            def _984d8a3e_fold_22623_1(x8, x7):
                 x9 = index(grid, astuple(x7, col))
                 x10 = branch(equality(x9, x6), ONE, ZERO)
                 x8 = add(x8, x10)
-                x7 = increment(x7)
+                return x8
+            x8 = fold(range(x0), x8, _984d8a3e_fold_22623_1)
             x11 = branch(greater(x8, x4), x6, x3)
             x4 = branch(greater(x8, x4), x8, x4)
             x3 = x11
-            x2 = increment(x2)
+            return (x3, x4)
+        (x3, x4) = fold(range(size(x5)), (x3, x4), _984d8a3e_fold_22619_0)
         return x3
     x0 = height(I)
     x1 = width(I)
@@ -22637,35 +22831,39 @@ def verify_984d8a3e(I: Grid) -> Grid:
     x4 = palette(I)
     x5 = remove(x2, remove(x3, x4))
     x6 = first(totuple(x5))
-    x7 = ZERO
     x8 = tuple()
-    while x7 < x0:
+
+    def _984d8a3e_fold_22642_2(x8, x7):
         x9 = I[x7]
         x10 = _984d8a3e_count_right(x9, x3)
         x11 = subtract(x1, x10)
         x8 = x8 + (x11,)
-        x7 = increment(x7)
+        return x8
+    x8 = fold(range(x0), x8, _984d8a3e_fold_22642_2)
     x12 = minimum(frozenset(x8))
     x13 = I
-    x14 = ZERO
-    while x14 < x0:
+
+    def _984d8a3e_fold_22651_3(x13, x14):
         x15 = I[x14]
         x16 = _984d8a3e_count_left(x15, x2)
         x17 = x8[x14]
         x18 = subtract(x17, x12)
         x19 = minimum(frozenset((x18, x16)))
         x20 = subtract(x16, x19)
-        x21 = x20
-        while x21 < x16:
+
+        def _984d8a3e_fold_22659_4(x13, x21):
             x22 = astuple(x14, x21)
             x13 = fill(x13, x6, initset(x22))
-            x21 = increment(x21)
-        x23 = subtract(x17, x19)
-        while x23 < x17:
+            return x13
+        x13 = fold(range(x20, x16), x13, _984d8a3e_fold_22659_4)
+
+        def _984d8a3e_fold_22664_5(x13, x23):
             x24 = astuple(x14, x23)
             x13 = fill(x13, x2, initset(x24))
-            x23 = increment(x23)
-        x14 = increment(x14)
+            return x13
+        x13 = fold(range(subtract(x17, x19), x17), x13, _984d8a3e_fold_22664_5)
+        return x13
+    x13 = fold(range(x0), x13, _984d8a3e_fold_22651_3)
     return x13
 
 def verify_985ae207(I: Grid) -> Grid:
@@ -23310,97 +23508,123 @@ def verify_9b4c17c4(I: Grid) -> Grid:
         x6 = 0
         while x6 < x1 and I[0][x6] == x2:
             x6 = x6 + 1
-        x7 = 0
-        while x7 < x0:
+
+        def _9b4c17c4_fold_23314_0(x5, x7):
             x8 = I[x7]
             x9 = 0
             x10 = 0
-            while x9 < x6:
+
+            def _9b4c17c4_fold_23318_1(x10, x9):
                 if x8[x9] == 2:
                     x10 = x10 + 1
-                x9 = x9 + 1
+                return x10
+            x10 = fold(range(x6), x10, _9b4c17c4_fold_23318_1)
             x9 = x6
             x11 = 0
-            while x9 < x1:
+
+            def _9b4c17c4_fold_23324_2(x11, x9):
                 if x8[x9] == 2:
                     x11 = x11 + 1
-                x9 = x9 + 1
+                return x11
+            x11 = fold(range(x6, x1), x11, _9b4c17c4_fold_23324_2)
             x12 = ()
             if x2 == 1:
                 x9 = 0
-                while x9 < x6 - x10:
+
+                def _9b4c17c4_fold_23331_5(x12, x9):
                     x12 = x12 + (1,)
-                    x9 = x9 + 1
-                x9 = 0
-                while x9 < x10:
+                    return x12
+                x12 = fold(range(x6 - x10), x12, _9b4c17c4_fold_23331_5)
+
+                def _9b4c17c4_fold_23335_6(x12, x9):
                     x12 = x12 + (2,)
-                    x9 = x9 + 1
+                    return x12
+                x12 = fold(range(x10), x12, _9b4c17c4_fold_23335_6)
             else:
                 x9 = 0
-                while x9 < x10:
+
+                def _9b4c17c4_fold_23340_7(x12, x9):
                     x12 = x12 + (2,)
-                    x9 = x9 + 1
-                x9 = 0
-                while x9 < x6 - x10:
+                    return x12
+                x12 = fold(range(x10), x12, _9b4c17c4_fold_23340_7)
+
+                def _9b4c17c4_fold_23344_8(x12, x9):
                     x12 = x12 + (8,)
-                    x9 = x9 + 1
+                    return x12
+                x12 = fold(range(x6 - x10), x12, _9b4c17c4_fold_23344_8)
             x13 = ()
             if x3 == 1:
                 x9 = 0
-                while x9 < x1 - x6 - x11:
+
+                def _9b4c17c4_fold_23350_9(x13, x9):
                     x13 = x13 + (1,)
-                    x9 = x9 + 1
-                x9 = 0
-                while x9 < x11:
+                    return x13
+                x13 = fold(range(x1 - x6 - x11), x13, _9b4c17c4_fold_23350_9)
+
+                def _9b4c17c4_fold_23354_10(x13, x9):
                     x13 = x13 + (2,)
-                    x9 = x9 + 1
+                    return x13
+                x13 = fold(range(x11), x13, _9b4c17c4_fold_23354_10)
             else:
                 x9 = 0
-                while x9 < x11:
+
+                def _9b4c17c4_fold_23359_11(x13, x9):
                     x13 = x13 + (2,)
-                    x9 = x9 + 1
-                x9 = 0
-                while x9 < x1 - x6 - x11:
+                    return x13
+                x13 = fold(range(x11), x13, _9b4c17c4_fold_23359_11)
+
+                def _9b4c17c4_fold_23363_12(x13, x9):
                     x13 = x13 + (8,)
-                    x9 = x9 + 1
+                    return x13
+                x13 = fold(range(x1 - x6 - x11), x13, _9b4c17c4_fold_23363_12)
             x14 = x12 + x13
             x5 = x5[:x7] + (x14,) + x5[x7 + 1:]
-            x7 = x7 + 1
+            return x5
+        x5 = fold(range(x0), x5, _9b4c17c4_fold_23314_0)
     else:
         x6 = 0
         while x6 < x0 and I[x6][0] == x2:
             x6 = x6 + 1
-        x7 = 0
-        while x7 < x0:
+
+        def _9b4c17c4_fold_23374_3(x5, x7):
             x8 = I[x7]
             x9 = x2 if x7 < x6 else I[x6][0]
             x10 = 0
             x11 = 0
-            while x10 < x1:
+
+            def _9b4c17c4_fold_23379_4(x11, x10):
                 if x8[x10] == 2:
                     x11 = x11 + 1
-                x10 = x10 + 1
+                return x11
+            x11 = fold(range(x1), x11, _9b4c17c4_fold_23379_4)
             x12 = ()
             if x9 == 1:
                 x10 = 0
-                while x10 < x1 - x11:
+
+                def _9b4c17c4_fold_23386_13(x12, x10):
                     x12 = x12 + (1,)
-                    x10 = x10 + 1
-                x10 = 0
-                while x10 < x11:
+                    return x12
+                x12 = fold(range(x1 - x11), x12, _9b4c17c4_fold_23386_13)
+
+                def _9b4c17c4_fold_23390_14(x12, x10):
                     x12 = x12 + (2,)
-                    x10 = x10 + 1
+                    return x12
+                x12 = fold(range(x11), x12, _9b4c17c4_fold_23390_14)
             else:
                 x10 = 0
-                while x10 < x11:
+
+                def _9b4c17c4_fold_23395_15(x12, x10):
                     x12 = x12 + (2,)
-                    x10 = x10 + 1
-                x10 = 0
-                while x10 < x1 - x11:
+                    return x12
+                x12 = fold(range(x11), x12, _9b4c17c4_fold_23395_15)
+
+                def _9b4c17c4_fold_23399_16(x12, x10):
                     x12 = x12 + (8,)
-                    x10 = x10 + 1
+                    return x12
+                x12 = fold(range(x1 - x11), x12, _9b4c17c4_fold_23399_16)
             x5 = x5[:x7] + (x12,) + x5[x7 + 1:]
-            x7 = x7 + 1
+            return x5
+        x5 = fold(range(x0), x5, _9b4c17c4_fold_23374_3)
     return x5
 
 def verify_9b5080bb(I: Grid) -> Grid:
@@ -24215,6 +24439,102 @@ def verify_9f41bd9c(I: Grid) -> Grid:
     x41 = fill(x26, NINE, x40)
     return x41
 
+def verify_9f669b64(I: Grid) -> Grid:
+    x0 = objects(I, T, F, T)
+    x1 = order(x0, compose(first, centerofmass))
+    x2 = order(x0, compose(last, centerofmass))
+    x3_row_spread = subtract(first(centerofmass(x1[2])), first(centerofmass(x1[0])))
+    x4_col_spread = subtract(last(centerofmass(x2[2])), last(centerofmass(x2[0])))
+    x5_vertical = greater(x3_row_spread, x4_col_spread)
+    if x5_vertical:
+        xConn = x1[1]
+        xA = x1[0]
+        xB = x1[2]
+    else:
+        xConn = x2[1]
+        xA = x2[0]
+        xB = x2[2]
+    xA_adj = adjacent(xA, xConn)
+    xB_adj = adjacent(xB, xConn)
+    if xA_adj and xB_adj:
+        if x5_vertical:
+            if greater(width(xA), width(xB)):
+                xT = xA
+                xS = xB
+            else:
+                xT = xB
+                xS = xA
+        elif greater(height(xA), height(xB)):
+            xT = xA
+            xS = xB
+        else:
+            xT = xB
+            xS = xA
+    elif xA_adj:
+        xS = xA
+        xT = xB
+    else:
+        xS = xB
+        xT = xA
+    xC_top = uppermost(xConn)
+    xC_bot = lowermost(xConn)
+    xC_left = leftmost(xConn)
+    xC_right = rightmost(xConn)
+    xT_top = uppermost(xT)
+    xT_bot = lowermost(xT)
+    xT_left = leftmost(xT)
+    xT_right = rightmost(xT)
+    xCh = height(xConn)
+    xCw = width(xConn)
+    xH = height(I)
+    xW = width(I)
+    if x5_vertical:
+        xT_row = first(centerofmass(xT))
+        xC_row = first(centerofmass(xConn))
+        x_move_up = xT_row < xC_row
+        xC_center_col = (xC_left + xC_right) // 2
+        x30 = sfilter(xT, lambda c: c[1][1] <= xC_center_col)
+        x31 = sfilter(xT, lambda c: c[1][1] > xC_center_col)
+        xC_half_w = halve(xCw)
+        x32 = shift(x30, (0, -xC_half_w))
+        x33 = shift(x31, (0, xC_half_w))
+        if x_move_up:
+            xC_new_top = xT_top - xCh
+            if xC_new_top < 0:
+                xC_new_top = 0
+        else:
+            xC_new_top = xT_bot + 1
+            if xC_new_top + xCh - 1 >= xH:
+                xC_new_top = xH - xCh
+        xC_offset = xC_new_top - xC_top
+        x34 = shift(xConn, (xC_offset, 0))
+    else:
+        xT_col = last(centerofmass(xT))
+        xC_col = last(centerofmass(xConn))
+        x_move_left = xT_col < xC_col
+        xC_center_row = (xC_top + xC_bot) // 2
+        x30 = sfilter(xT, lambda c: c[1][0] <= xC_center_row)
+        x31 = sfilter(xT, lambda c: c[1][0] > xC_center_row)
+        xC_half_h = halve(xCh)
+        x32 = shift(x30, (-xC_half_h, 0))
+        x33 = shift(x31, (xC_half_h, 0))
+        if x_move_left:
+            xC_new_left = xT_left - xCw
+            if xC_new_left < 0:
+                xC_new_left = 0
+        else:
+            xC_new_left = xT_right + 1
+            if xC_new_left + xCw - 1 >= xW:
+                xC_new_left = xW - xCw
+        xC_offset = xC_new_left - xC_left
+        x34 = shift(xConn, (0, xC_offset))
+    x35 = cover(I, xConn)
+    x36 = cover(x35, xT)
+    x37 = paint(x36, x32)
+    x38 = paint(x37, x33)
+    x39 = paint(x38, x34)
+    return x39
+
 def verify_9f5f939b(I: Grid) -> Grid:
     x0 = objects(I, T, F, T)
     x1 = sfilter(x0, hline)
@@ -24330,30 +24650,34 @@ def verify_a096bf4d(I: Grid) -> Grid:
         x26 = x25[ZERO]
         x27 = x25[ONE]
         x28 = ()
-        x29 = ZERO
-        while x29 < x18:
+
+        def _a096bf4d_fold_24334_0(x28, x29):
             x30 = add(multiply(x29, FIVE), add(x26, ONE))
             x31 = ()
-            x32 = ZERO
-            while x32 < x19:
+
+            def _a096bf4d_fold_24338_1(x31, x32):
                 x33 = add(multiply(x32, FIVE), add(x27, ONE))
                 x34 = index(I, astuple(x30, x33))
                 x31 = x31 + (x34,)
-                x32 = increment(x32)
+                return x31
+            x31 = fold(range(x19), x31, _a096bf4d_fold_24338_1)
             x28 = x28 + (x31,)
-            x29 = increment(x29)
+            return x28
+        x28 = fold(range(x18), x28, _a096bf4d_fold_24334_0)
         x35 = ()
-        x36 = ZERO
-        while x36 < x18:
-            x37 = ZERO
-            while x37 < x19:
+
+        def _a096bf4d_fold_24347_2(x35, x36):
+
+            def _a096bf4d_fold_24349_3(x35, x37):
                 x35 = x35 + (x28[x36][x37],)
-                x37 = increment(x37)
-            x36 = increment(x36)
+                return x35
+            x35 = fold(range(x19), x35, _a096bf4d_fold_24349_3)
+            return x35
+        x35 = fold(range(x18), x35, _a096bf4d_fold_24347_2)
         x38 = mostcommon(x35)
         x39 = x28
-        x40 = ZERO
-        while x40 < x18:
+
+        def _a096bf4d_fold_24356_4(x39, x40):
             x41 = x39[x40]
             x42 = ZERO
             while x42 < x19:
@@ -24363,93 +24687,110 @@ def verify_a096bf4d(I: Grid) -> Grid:
                 x46 = branch(x45, x43, NEG_ONE)
                 x42 = increment(x42)
             x47 = frozenset()
-            x48 = ZERO
-            while x48 < x19:
+
+            def _a096bf4d_fold_24367_5(x47, x48):
                 x49 = x41[x48]
                 x50 = equality(x49, x38)
                 x51 = flip(x50)
                 x47 = branch(x51, insert(x49, x47), x47)
-                x48 = increment(x48)
+                return x47
+            x47 = fold(range(x19), x47, _a096bf4d_fold_24367_5)
             x52 = totuple(x47)
-            x53 = ZERO
-            while x53 < size(x52):
+
+            def _a096bf4d_fold_24375_6(x39, x53):
                 x54 = x52[x53]
-                x55 = ZERO
                 x56 = NEG_ONE
                 x57 = NEG_ONE
-                while x55 < x19:
+
+                def _a096bf4d_fold_24380_7(_state, x55):
+                    (x56, x57) = _state
                     x58 = equality(x41[x55], x54)
                     x56 = branch(both(x58, equality(x56, NEG_ONE)), x55, x56)
                     x57 = branch(x58, x55, x57)
-                    x55 = increment(x55)
-                x59 = increment(x56)
-                while x59 < x57:
+                    return (x56, x57)
+                (x56, x57) = fold(range(x19), (x56, x57), _a096bf4d_fold_24380_7)
+
+                def _a096bf4d_fold_24386_8(x39, x59):
                     x60 = x39[x40][x59]
                     x61 = equality(x60, x38)
                     x62 = branch(x61, x54, x60)
                     x63 = ()
-                    x64 = ZERO
-                    while x64 < x19:
+
+                    def _a096bf4d_fold_24392_9(x63, x64):
                         x65 = branch(equality(x64, x59), x62, x39[x40][x64])
                         x63 = x63 + (x65,)
-                        x64 = increment(x64)
+                        return x63
+                    x63 = fold(range(x19), x63, _a096bf4d_fold_24392_9)
                     x66 = ()
-                    x67 = ZERO
-                    while x67 < x18:
+
+                    def _a096bf4d_fold_24398_10(x66, x67):
                         x68 = branch(equality(x67, x40), x63, x39[x67])
                         x66 = x66 + (x68,)
-                        x67 = increment(x67)
+                        return x66
+                    x66 = fold(range(x18), x66, _a096bf4d_fold_24398_10)
                     x39 = x66
-                    x59 = increment(x59)
-                x53 = increment(x53)
-            x40 = increment(x40)
-        x69 = ZERO
-        while x69 < x19:
+                    return x39
+                x39 = fold(range(increment(x56), x57), x39, _a096bf4d_fold_24386_8)
+                return x39
+            x39 = fold(range(size(x52)), x39, _a096bf4d_fold_24375_6)
+            return x39
+        x39 = fold(range(x18), x39, _a096bf4d_fold_24356_4)
+
+        def _a096bf4d_fold_24407_11(x39, x69):
             x70 = ()
-            x71 = ZERO
-            while x71 < x18:
+
+            def _a096bf4d_fold_24410_12(x70, x71):
                 x70 = x70 + (x39[x71][x69],)
-                x71 = increment(x71)
+                return x70
+            x70 = fold(range(x18), x70, _a096bf4d_fold_24410_12)
             x72 = frozenset()
-            x73 = ZERO
-            while x73 < x18:
+
+            def _a096bf4d_fold_24415_13(x72, x73):
                 x74 = x70[x73]
                 x75 = flip(equality(x74, x38))
                 x72 = branch(x75, insert(x74, x72), x72)
-                x73 = increment(x73)
+                return x72
+            x72 = fold(range(x18), x72, _a096bf4d_fold_24415_13)
             x76 = totuple(x72)
-            x77 = ZERO
-            while x77 < size(x76):
+
+            def _a096bf4d_fold_24422_14(x39, x77):
                 x78 = x76[x77]
-                x79 = ZERO
                 x80 = NEG_ONE
                 x81 = NEG_ONE
-                while x79 < x18:
+
+                def _a096bf4d_fold_24427_15(_state, x79):
+                    (x80, x81) = _state
                     x82 = equality(x70[x79], x78)
                     x80 = branch(both(x82, equality(x80, NEG_ONE)), x79, x80)
                     x81 = branch(x82, x79, x81)
-                    x79 = increment(x79)
-                x83 = increment(x80)
-                while x83 < x81:
+                    return (x80, x81)
+                (x80, x81) = fold(range(x18), (x80, x81), _a096bf4d_fold_24427_15)
+
+                def _a096bf4d_fold_24433_16(x39, x83):
                     x84 = x39[x83][x69]
                     x85 = equality(x84, x38)
                     x86 = branch(x85, x78, x84)
                     x87 = ()
-                    x88 = ZERO
-                    while x88 < x19:
+
+                    def _a096bf4d_fold_24439_17(x87, x88):
                         x89 = branch(equality(x88, x69), x86, x39[x83][x88])
                         x87 = x87 + (x89,)
-                        x88 = increment(x88)
+                        return x87
+                    x87 = fold(range(x19), x87, _a096bf4d_fold_24439_17)
                     x90 = ()
-                    x91 = ZERO
-                    while x91 < x18:
+
+                    def _a096bf4d_fold_24445_18(x90, x91):
                         x92 = branch(equality(x91, x83), x87, x39[x91])
                         x90 = x90 + (x92,)
-                        x91 = increment(x91)
+                        return x90
+                    x90 = fold(range(x18), x90, _a096bf4d_fold_24445_18)
                     x39 = x90
-                    x83 = increment(x83)
-                x77 = increment(x77)
-            x69 = increment(x69)
+                    return x39
+                x39 = fold(range(increment(x80), x81), x39, _a096bf4d_fold_24433_16)
+                return x39
+            x39 = fold(range(size(x76)), x39, _a096bf4d_fold_24422_14)
+            return x39
+        x39 = fold(range(x19), x39, _a096bf4d_fold_24407_11)
 
         def _a096bf4d_fold_24324_1(x20, x93):
             x94 = add(multiply(x93, FIVE), add(x26, ONE))
@@ -25032,18 +25373,21 @@ def verify_a64e4611(I: Grid) -> Grid:
                 ranges = []
                 cs = eligible[0]
                 ce = eligible[0]
-                k = 1
-                while k < len(eligible):
+
+                def _a64e4611_fold_25285_0(_state, k):
+                    (ce, cs, ranges) = _state
                     if eligible[k] == ce + 1:
                         ce = eligible[k]
                     else:
                         ranges.append((cs, ce))
                         cs = eligible[k]
                         ce = eligible[k]
-                    k = k + 1
+                    return (ce, cs, ranges)
+                (ce, cs, ranges) = fold(range(1, len(eligible)), (ce, cs, ranges), _a64e4611_fold_25285_0)
                 ranges.append((cs, ce))
-                ri = 0
-                while ri < len(ranges):
+
+                def _a64e4611_fold_25295_1(_state, ri):
+                    (best_band, best_score) = _state
                     (rcs, rce) = ranges[ri]
                     bw = rce - rcs + 1
                     if bw >= 3:
@@ -25052,7 +25396,8 @@ def verify_a64e4611(I: Grid) -> Grid:
                         if score > best_score:
                             best_score = score
                             best_band = (rcs, rce, actual_spi)
-                    ri = ri + 1
+                    return (best_band, best_score)
+                (best_band, best_score) = fold(range(len(ranges)), (best_band, best_score), _a64e4611_fold_25295_1)
             spi = spi + 1
         return best_band
 
@@ -25062,8 +25407,9 @@ def verify_a64e4611(I: Grid) -> Grid:
         ranges = []
         cs = rows[0]
         ce = rows[0]
-        k = 1
-        while k < len(rows):
+
+        def _a64e4611_fold_25315_2(_state, k):
+            (ce, cs, ranges) = _state
             if rows[k] == ce + 1:
                 ce = rows[k]
             else:
@@ -25071,7 +25417,8 @@ def verify_a64e4611(I: Grid) -> Grid:
                     ranges.append((cs, ce))
                 cs = rows[k]
                 ce = rows[k]
-            k = k + 1
+            return (ce, cs, ranges)
+        (ce, cs, ranges) = fold(range(1, len(rows)), (ce, cs, ranges), _a64e4611_fold_25315_2)
         if ce - cs + 1 >= min_size:
             ranges.append((cs, ce))
         return ranges
@@ -25079,44 +25426,53 @@ def verify_a64e4611(I: Grid) -> Grid:
     def _a64e4611_find_arms(I, bg, h, w, vcs, vce, vspi):
         left_rows = []
         right_rows = []
-        r = vspi
-        while r < h:
+
+        def _a64e4611_fold_25332_3(_state, r):
+            (left_rows, right_rows) = _state
             all_left = all_match(range(vce + 1), lambda c: not I[r][c] != bg)
             all_right = all_match(range(vcs, w), lambda c: not I[r][c] != bg)
             if all_left:
                 left_rows.append(r)
             if all_right:
                 right_rows.append(r)
-            r = r + 1
+            return (left_rows, right_rows)
+        (left_rows, right_rows) = fold(range(vspi, h), (left_rows, right_rows), _a64e4611_fold_25332_3)
         left_ranges = _a64e4611_contiguous(left_rows, 3)
         right_ranges = _a64e4611_contiguous(right_rows, 3)
         both_ranges = []
         used_left = set()
         used_right = set()
         li = 0
-        while li < len(left_ranges):
-            ri = 0
-            while ri < len(right_ranges):
+
+        def _a64e4611_fold_25346_4(_state, li):
+            (both_ranges, used_left, used_right) = _state
+
+            def _a64e4611_fold_25348_5(_state, ri):
+                (both_ranges, used_left, used_right) = _state
                 ors = max(left_ranges[li][0], right_ranges[ri][0])
                 ore = min(left_ranges[li][1], right_ranges[ri][1])
                 if ore - ors + 1 >= 3:
                     both_ranges.append((ors, ore))
                     used_left.add(li)
                     used_right.add(ri)
-                ri = ri + 1
-            li = li + 1
+                return (both_ranges, used_left, used_right)
+            (both_ranges, used_left, used_right) = fold(range(len(right_ranges)), (both_ranges, used_left, used_right), _a64e4611_fold_25348_5)
+            return (both_ranges, used_left, used_right)
+        (both_ranges, used_left, used_right) = fold(range(len(left_ranges)), (both_ranges, used_left, used_right), _a64e4611_fold_25346_4)
         single_left = []
-        li = 0
-        while li < len(left_ranges):
+
+        def _a64e4611_fold_25359_6(single_left, li):
             if li not in used_left:
                 single_left.append(left_ranges[li])
-            li = li + 1
+            return single_left
+        single_left = fold(range(len(left_ranges)), single_left, _a64e4611_fold_25359_6)
         single_right = []
-        ri = 0
-        while ri < len(right_ranges):
+
+        def _a64e4611_fold_25365_7(single_right, ri):
             if ri not in used_right:
                 single_right.append(right_ranges[ri])
-            ri = ri + 1
+            return single_right
+        single_right = fold(range(len(right_ranges)), single_right, _a64e4611_fold_25365_7)
         return (both_ranges, single_left, single_right)
 
     def _a64e4611_compute_threes(I, bg, h, w, vcs, vce, vspi, arms):
@@ -25124,14 +25480,19 @@ def verify_a64e4611(I: Grid) -> Grid:
         three_positions = set()
         inner_row_start = vspi + 1 if vspi > 0 else vspi
         c = vcs + 1
-        while c < vce:
-            r = inner_row_start
-            while r < h:
+
+        def _a64e4611_fold_25376_8(three_positions, c):
+
+            def _a64e4611_fold_25378_9(three_positions, r):
                 three_positions.add((r, c))
-                r = r + 1
-            c = c + 1
+                return three_positions
+            three_positions = fold(range(inner_row_start, h), three_positions, _a64e4611_fold_25378_9)
+            return three_positions
+        three_positions = fold(range(vcs + 1, vce), three_positions, _a64e4611_fold_25376_8)
         ai = 0
-        while ai < len(both_ranges):
+
+        def _a64e4611_fold_25383_10(_state, ai):
+            (c, three_positions) = _state
             (rs, re) = both_ranges[ai]
             irs = rs + 1 if rs > 0 else rs
             ire = re - 1
@@ -25141,14 +25502,18 @@ def verify_a64e4611(I: Grid) -> Grid:
                 while c <= vcs:
                     three_positions.add((r, c))
                     c = c + 1
-                c = vce
-                while c < w:
+
+                def _a64e4611_fold_25394_11(three_positions, c):
                     three_positions.add((r, c))
-                    c = c + 1
+                    return three_positions
+                three_positions = fold(range(vce, w), three_positions, _a64e4611_fold_25394_11)
                 r = r + 1
-            ai = ai + 1
+            return (c, three_positions)
+        (c, three_positions) = fold(range(len(both_ranges)), (c, three_positions), _a64e4611_fold_25383_10)
         ai = 0
-        while ai < len(single_left):
+
+        def _a64e4611_fold_25400_12(_state, ai):
+            (c, three_positions) = _state
             (rs, re) = single_left[ai]
             irs = rs + 1 if rs > 0 else rs
             ire = re - 1
@@ -25159,70 +25524,88 @@ def verify_a64e4611(I: Grid) -> Grid:
                     three_positions.add((r, c))
                     c = c + 1
                 r = r + 1
-            ai = ai + 1
+            return (c, three_positions)
+        (c, three_positions) = fold(range(len(single_left)), (c, three_positions), _a64e4611_fold_25400_12)
         ai = 0
-        while ai < len(single_right):
+
+        def _a64e4611_fold_25413_13(_state, ai):
+            (c, three_positions) = _state
             (rs, re) = single_right[ai]
             irs = rs + 1 if rs > 0 else rs
             ire = re - 1
             r = irs
             while r <= ire:
-                c = vce
-                while c < w:
+
+                def _a64e4611_fold_25420_14(three_positions, c):
                     three_positions.add((r, c))
-                    c = c + 1
+                    return three_positions
+                three_positions = fold(range(vce, w), three_positions, _a64e4611_fold_25420_14)
                 r = r + 1
-            ai = ai + 1
+            return (c, three_positions)
+        (c, three_positions) = fold(range(len(single_right)), (c, three_positions), _a64e4611_fold_25413_13)
         all_left = both_ranges + single_left
         all_right = both_ranges + single_right
         ai = 0
-        while ai < len(all_right):
+
+        def _a64e4611_fold_25428_15(_state, ai):
+            (c, three_positions) = _state
             (rs, re) = all_right[ai]
             if rs > 0:
                 sec_cols = []
                 c = vce
-                while c < w:
+
+                def _a64e4611_fold_25433_16(sec_cols, c):
                     ok = all_match(range(rs), lambda r: not I[r][c] != bg)
                     if ok:
                         sec_cols.append(c)
-                    c = c + 1
+                    return sec_cols
+                sec_cols = fold(range(vce, w), sec_cols, _a64e4611_fold_25433_16)
                 sec_ranges = _a64e4611_contiguous(sec_cols, 3)
-                si = 0
-                while si < len(sec_ranges):
+
+                def _a64e4611_fold_25440_17(three_positions, si):
                     (scs, sce) = sec_ranges[si]
-                    c = scs + 1
-                    while c < sce:
+
+                    def _a64e4611_fold_25443_18(three_positions, c):
                         r = 0
                         ire = re - 1
                         while r <= ire:
                             three_positions.add((r, c))
                             r = r + 1
-                        c = c + 1
-                    si = si + 1
+                        return three_positions
+                    three_positions = fold(range(scs + 1, sce), three_positions, _a64e4611_fold_25443_18)
+                    return three_positions
+                three_positions = fold(range(len(sec_ranges)), three_positions, _a64e4611_fold_25440_17)
             if re < h - 1:
                 sec_cols = []
                 c = vce
-                while c < w:
+
+                def _a64e4611_fold_25454_19(sec_cols, c):
                     ok = all_match(range(re + 1, h), lambda r: not I[r][c] != bg)
                     if ok:
                         sec_cols.append(c)
-                    c = c + 1
+                    return sec_cols
+                sec_cols = fold(range(vce, w), sec_cols, _a64e4611_fold_25454_19)
                 sec_ranges = _a64e4611_contiguous(sec_cols, 3)
-                si = 0
-                while si < len(sec_ranges):
+
+                def _a64e4611_fold_25461_20(three_positions, si):
                     (scs, sce) = sec_ranges[si]
-                    c = scs + 1
-                    while c < sce:
+
+                    def _a64e4611_fold_25464_21(three_positions, c):
                         irs = rs + 1 if rs > 0 else rs
-                        r = irs
-                        while r < h:
+
+                        def _a64e4611_fold_25467_22(three_positions, r):
                             three_positions.add((r, c))
-                            r = r + 1
-                        c = c + 1
-                    si = si + 1
-            ai = ai + 1
-        ai = 0
-        while ai < len(all_left):
+                            return three_positions
+                        three_positions = fold(range(irs, h), three_positions, _a64e4611_fold_25467_22)
+                        return three_positions
+                    three_positions = fold(range(scs + 1, sce), three_positions, _a64e4611_fold_25464_21)
+                    return three_positions
+                three_positions = fold(range(len(sec_ranges)), three_positions, _a64e4611_fold_25461_20)
+            return (c, three_positions)
+        (c, three_positions) = fold(range(len(all_right)), (c, three_positions), _a64e4611_fold_25428_15)
+
+        def _a64e4611_fold_25474_23(_state, ai):
+            (c, three_positions) = _state
             (rs, re) = all_left[ai]
             if rs > 0:
                 sec_cols = []
@@ -25233,18 +25616,20 @@ def verify_a64e4611(I: Grid) -> Grid:
                         sec_cols.append(c)
                     c = c + 1
                 sec_ranges = _a64e4611_contiguous(sec_cols, 3)
-                si = 0
-                while si < len(sec_ranges):
+
+                def _a64e4611_fold_25486_24(three_positions, si):
                     (scs, sce) = sec_ranges[si]
-                    c = scs + 1
-                    while c < sce:
+
+                    def _a64e4611_fold_25489_25(three_positions, c):
                         r = 0
                         ire = re - 1
                         while r <= ire:
                             three_positions.add((r, c))
                             r = r + 1
-                        c = c + 1
-                    si = si + 1
+                        return three_positions
+                    three_positions = fold(range(scs + 1, sce), three_positions, _a64e4611_fold_25489_25)
+                    return three_positions
+                three_positions = fold(range(len(sec_ranges)), three_positions, _a64e4611_fold_25486_24)
             if re < h - 1:
                 sec_cols = []
                 c = 0
@@ -25254,19 +25639,23 @@ def verify_a64e4611(I: Grid) -> Grid:
                         sec_cols.append(c)
                     c = c + 1
                 sec_ranges = _a64e4611_contiguous(sec_cols, 3)
-                si = 0
-                while si < len(sec_ranges):
+
+                def _a64e4611_fold_25507_26(three_positions, si):
                     (scs, sce) = sec_ranges[si]
-                    c = scs + 1
-                    while c < sce:
+
+                    def _a64e4611_fold_25510_27(three_positions, c):
                         irs = rs + 1 if rs > 0 else rs
-                        r = irs
-                        while r < h:
+
+                        def _a64e4611_fold_25513_28(three_positions, r):
                             three_positions.add((r, c))
-                            r = r + 1
-                        c = c + 1
-                    si = si + 1
-            ai = ai + 1
+                            return three_positions
+                        three_positions = fold(range(irs, h), three_positions, _a64e4611_fold_25513_28)
+                        return three_positions
+                    three_positions = fold(range(scs + 1, sce), three_positions, _a64e4611_fold_25510_27)
+                    return three_positions
+                three_positions = fold(range(len(sec_ranges)), three_positions, _a64e4611_fold_25507_26)
+            return (c, three_positions)
+        (c, three_positions) = fold(range(len(all_left)), (c, three_positions), _a64e4611_fold_25474_23)
         return frozenset(three_positions)
     x0 = _a64e4611_solve(I)
     return x0
@@ -26554,12 +26943,13 @@ def verify_ac6f9922(I: Grid) -> Grid:
 
     def _ac6f9922_groups(x0):
         x1 = (x0[ZERO],)
-        x2 = ONE
-        while x2 < size(x0):
+
+        def _ac6f9922_fold_26558_0(x1, x2):
             x3 = x0[x2]
             x4 = x0[subtract(x2, ONE)]
             x1 = x1 + branch(equality(x3, increment(x4)), (), (x4, x3))
-            x2 = increment(x2)
+            return x1
+        x1 = fold(range(1, size(x0)), x1, _ac6f9922_fold_26558_0)
         x1 = x1 + (x0[decrement(size(x0))],)
         return x1
     x0 = index(I, ORIGIN)
@@ -26585,14 +26975,16 @@ def verify_ac6f9922(I: Grid) -> Grid:
             x21 = increment(x14[increment(x20)])
             x22 = x14[add(x20, TWO)]
             x23 = x0
-            x24 = x17
-            while x24 < x18:
-                x25 = x21
-                while x25 < x22:
+
+            def _ac6f9922_fold_26589_1(x23, x24):
+
+                def _ac6f9922_fold_26591_2(x23, x25):
                     x26 = index(I, astuple(x24, x25))
                     x23 = branch(both(flip(equality(x26, x0)), flip(equality(x26, x5))), x26, x23)
-                    x25 = increment(x25)
-                x24 = increment(x24)
+                    return x23
+                x23 = fold(range(x21, x22), x23, _ac6f9922_fold_26591_2)
+                return x23
+            x23 = fold(range(x17, x18), x23, _ac6f9922_fold_26589_1)
             x19 = x19 + (x23,)
             x20 = add(x20, TWO)
         x15 = x15 + (x19,)
@@ -29243,19 +29635,20 @@ def verify_bae5c565(I: Grid) -> Grid:
     x5 = leftmost(x4)
     x6 = uppermost(x4)
     x7 = canvas(FIVE, astuple(x0, x1))
-    x8 = x6
     x9 = x7
-    while x8 < x0:
+
+    def _bae5c565_fold_29248_0(x9, x8):
         x10 = subtract(x8, x6)
         x11 = subtract(x5, x10)
         x12 = add(x5, x10)
         x13 = fill(x9, EIGHT, initset(astuple(x8, x5)))
-        x14 = x11
-        while x14 < x5:
+
+        def _bae5c565_fold_29254_1(x13, x14):
             x15 = index(I, astuple(ZERO, x14))
             x16 = fill(x13, x15, initset(astuple(x8, x14)))
             x13 = x16
-            x14 = increment(x14)
+            return x13
+        x13 = fold(range(x11, x5), x13, _bae5c565_fold_29254_1)
         x17 = increment(x5)
         while x17 <= x12:
             x18 = branch(greater(x17, decrement(x1)), FIVE, index(I, astuple(ZERO, x17)))
@@ -29263,7 +29656,8 @@ def verify_bae5c565(I: Grid) -> Grid:
             x13 = x19
             x17 = increment(x17)
         x9 = x13
-        x8 = increment(x8)
+        return x9
+    x9 = fold(range(x6, x0), x9, _bae5c565_fold_29248_0)
     return x9
 
 def verify_baf41dbf(I: Grid) -> Grid:
@@ -30914,8 +31308,8 @@ def verify_c87289bb(I: Grid) -> Grid:
     x8 = dedupe(x7)
     x9 = size(x8)
     x10 = frozenset()
-    x11 = ZERO
-    while greater(x9, x11):
+
+    def _c87289bb_fold_30918_0(x10, x11):
         x12 = x8[x11]
         x13 = contained(x12, x6)
         if x13:
@@ -30930,20 +31324,24 @@ def verify_c87289bb(I: Grid) -> Grid:
             x18 = branch(greater(x17, x15), x14, x16)
             x19 = branch(greater(x12, x18), x18, x12)
             x20 = branch(greater(x12, x18), x12, x18)
-            x21 = x19
-            while not greater(x21, x20):
+
+            def _c87289bb_fold_30934_1(x10, x21):
                 x10 = insert(astuple(x4, x21), x10)
-                x21 = increment(x21)
-            x22 = x4
-            while greater(x2, x22):
+                return x10
+            x10 = fold(range(x19, x20 + 1), x10, _c87289bb_fold_30934_1)
+
+            def _c87289bb_fold_30938_2(x10, x22):
                 x10 = insert(astuple(x22, x18), x10)
-                x22 = increment(x22)
+                return x10
+            x10 = fold(range(x4, x2), x10, _c87289bb_fold_30938_2)
         else:
-            x23 = x4
-            while greater(x2, x23):
+
+            def _c87289bb_fold_30943_3(x10, x23):
                 x10 = insert(astuple(x23, x12), x10)
-                x23 = increment(x23)
-        x11 = increment(x11)
+                return x10
+            x10 = fold(range(x4, x2), x10, _c87289bb_fold_30943_3)
+        return x10
+    x10 = fold(range(x9), x10, _c87289bb_fold_30918_0)
     x24 = fill(I, EIGHT, x10)
     return x24
 
@@ -31980,59 +32378,66 @@ def verify_cf133acc(I: Grid) -> Grid:
         x0 = height(I)
         x1 = width(I)
         x2 = ()
-        x3 = ZERO
-        while x3 < x0:
+
+        def _cf133acc_fold_31984_0(x2, x3):
             x4 = I[x3]
             x5 = frozenset(x4)
             x6 = difference(x5, frozenset({ZERO}))
             x7 = totuple(x6)
-            x8 = ZERO
-            while x8 < size(x7):
+
+            def _cf133acc_fold_31990_1(x2, x8):
                 x9 = x7[x8]
-                x10 = ZERO
                 x11 = ()
-                while x10 < x1:
+
+                def _cf133acc_fold_31994_2(x11, x10):
                     if x4[x10] == x9:
                         x11 = x11 + (x10,)
-                    x10 = x10 + 1
+                    return x11
+                x11 = fold(range(x1), x11, _cf133acc_fold_31994_2)
                 if size(x11) >= TWO:
-                    x12 = ZERO
-                    while x12 < size(x11) - 1:
+
+                    def _cf133acc_fold_32000_3(x2, x12):
                         x13 = x11[x12 + 1] - x11[x12]
                         if x13 == TWO:
                             x14 = x11[x12] + 1
                             if x4[x14] == ZERO:
                                 x2 = x2 + ((x14, x3, x9),)
-                        x12 = x12 + 1
-                x8 = x8 + 1
-            x3 = x3 + 1
+                        return x2
+                    x2 = fold(range(size(x11) - 1), x2, _cf133acc_fold_32000_3)
+                return x2
+            x2 = fold(range(size(x7)), x2, _cf133acc_fold_31990_1)
+            return x2
+        x2 = fold(range(x0), x2, _cf133acc_fold_31984_0)
         return x2
     x0 = height(I)
     x1 = width(I)
     x2 = _cf133acc_find_bars(I)
     x4 = ()
-    x5 = ZERO
-    while x5 < size(x2):
+
+    def _cf133acc_fold_32015_4(x4, x5):
         x6 = x2[x5][0]
         x7 = F
-        x8 = ZERO
-        while x8 < size(x4):
+
+        def _cf133acc_fold_32019_5(x7, x8):
             if x4[x8] == x6:
                 x7 = T
-            x8 = x8 + 1
+            return x7
+        x7 = fold(range(size(x4)), x7, _cf133acc_fold_32019_5)
         if not x7:
             x4 = x4 + (x6,)
-        x5 = x5 + 1
+        return x4
+    x4 = fold(range(size(x2)), x4, _cf133acc_fold_32015_4)
     x9 = I
-    x10 = ZERO
-    while x10 < size(x4):
+
+    def _cf133acc_fold_32028_6(x9, x10):
         x11 = x4[x10]
         x12 = ()
-        x13 = ZERO
-        while x13 < size(x2):
+
+        def _cf133acc_fold_32032_7(x12, x13):
             if x2[x13][0] == x11:
                 x12 = x12 + ((x2[x13][1], x2[x13][2]),)
-            x13 = x13 + 1
+            return x12
+        x12 = fold(range(size(x2)), x12, _cf133acc_fold_32032_7)
         x14 = order(frozenset(x12), first)
         x15 = first(last(x14))
         x16 = ZERO
@@ -32043,37 +32448,43 @@ def verify_cf133acc(I: Grid) -> Grid:
                 x16 = x18
                 x17 = x0
             x17 = x17 + 1
-        x19 = ZERO
-        while x19 < size(x14):
+
+        def _cf133acc_fold_32047_8(x9, x19):
             x20 = x14[x19]
             x21 = first(x20)
             x22 = last(x20)
             x9 = fill(x9, x22, frozenset({astuple(x21, x11)}))
-            x19 = x19 + 1
+            return x9
+        x9 = fold(range(size(x14)), x9, _cf133acc_fold_32047_8)
         x23 = first(x14)
         x24 = first(x23)
         x25 = last(x23)
-        x26 = ZERO
-        while x26 < x24:
+
+        def _cf133acc_fold_32057_9(x9, x26):
             x9 = fill(x9, x25, frozenset({astuple(x26, x11)}))
-            x26 = x26 + 1
-        x27 = ZERO
-        while x27 < size(x14) - 1:
+            return x9
+        x9 = fold(range(x24), x9, _cf133acc_fold_32057_9)
+
+        def _cf133acc_fold_32061_10(x9, x27):
             x28 = x14[x27]
             x29 = x14[x27 + 1]
             x30 = first(x28) + 1
             x31 = first(x29)
             x32 = last(x29)
-            x33 = x30
-            while x33 < x31:
+
+            def _cf133acc_fold_32068_11(x9, x33):
                 x9 = fill(x9, x32, frozenset({astuple(x33, x11)}))
-                x33 = x33 + 1
-            x27 = x27 + 1
-        x34 = x15 + 1
-        while x34 < x0:
+                return x9
+            x9 = fold(range(x30, x31), x9, _cf133acc_fold_32068_11)
+            return x9
+        x9 = fold(range(size(x14) - 1), x9, _cf133acc_fold_32061_10)
+
+        def _cf133acc_fold_32073_12(x9, x34):
             x9 = fill(x9, x16, frozenset({astuple(x34, x11)}))
-            x34 = x34 + 1
-        x10 = x10 + 1
+            return x9
+        x9 = fold(range(x15 + 1, x0), x9, _cf133acc_fold_32073_12)
+        return x9
+    x9 = fold(range(size(x4)), x9, _cf133acc_fold_32028_6)
     return x9
 
 def verify_cf5fd0ad(I: Grid) -> Grid:
@@ -35149,11 +35560,12 @@ def verify_e21a174a(I: Grid) -> Grid:
     x3 = order(x2, uppermost)
     x4 = size(x3)
     x5 = canvas(ZERO, astuple(x0, x1))
-    x6 = decrement(x4)
     x7 = tuple()
-    while x6 >= ZERO:
+
+    def _e21a174a_fold_35425_0(x7, x6):
         x7 = x7 + (x3[x6],)
-        x6 = decrement(x6)
+        return x7
+    x7 = fold(range(decrement(x4), ZERO - 1, -1), x7, _e21a174a_fold_35425_0)
     x8 = uppermost(x3[ZERO])
     x9 = x5
     x11 = x8
@@ -36001,119 +36413,279 @@ def verify_e6721834(I: Grid) -> Grid:
     x41 = paint(x9, x40)
     return x41
 
+def verify_e6de6e8f(I: Grid) -> Grid:
+    x0 = width(I)
+    x1 = interval(ZERO, x0, ONE)
+
+    def _e6de6e8f_fold_parse(_state, x2):
+        (x3, x4) = _state
+        if x4:
+            return (x3, F)
+        x5 = index(I, astuple(ZERO, x2))
+        x6 = index(I, astuple(ONE, x2))
+        if equality(x5, ZERO) and equality(x6, ZERO):
+            return (x3, F)
+        x7 = add(x2, ONE)
+        if x7 < x0:
+            x8 = index(I, astuple(ZERO, x7))
+            x9 = index(I, astuple(ONE, x7))
+            x10 = equality(x8, ZERO) and equality(x9, ZERO)
+            if not x10:
+                if equality(x5, ZERO):
+                    return (x3 + (ONE,), T)
+                else:
+                    return (x3 + (TWO,), T)
+        return (x3 + (ZERO,), F)
+
+    (x11, _) = fold(x1, ((), F), _e6de6e8f_fold_parse)
+    x12 = size(x11)
+
+    def _e6de6e8f_fold_runs(_state, x13):
+        (x14, x15) = _state
+        x16 = x11[x13]
+        if x16 > ZERO:
+            x17 = branch(equality(x15, NEG_ONE), x13, x15)
+            x18 = add(x13, ONE)
+            if x18 < x12:
+                x19 = x11[x18]
+                if x19 > ZERO:
+                    return (x14 + ((x17, NEG_ONE),), x17)
+            return (x14 + ((x17, x13),), NEG_ONE)
+        else:
+            return (x14 + ((NEG_ONE, NEG_ONE),), NEG_ONE)
+
+    (x20, _) = fold(interval(ZERO, x12, ONE), ((), NEG_ONE), _e6de6e8f_fold_runs)
+
+    def _e6de6e8f_fold_fixruns(_state, x21):
+        (x22,) = _state
+        (x23, x24) = x20[x21]
+        if equality(x23, NEG_ONE):
+            return (x22 + ((NEG_ONE, NEG_ONE),),)
+        if not equality(x24, NEG_ONE):
+            return (x22 + ((x23, x24),),)
+        x25 = x21
+        for x26 in range(x21, x12):
+            (x27, x28) = x20[x26]
+            if equality(x27, NEG_ONE):
+                break
+            x25 = x26
+            if not equality(x28, NEG_ONE):
+                break
+        return (x22 + ((x23, x25),),)
+
+    (x29,) = fold(interval(ZERO, x12, ONE), ((),), _e6de6e8f_fold_fixruns)
+
+    def _e6de6e8f_fold_build(_state, x30):
+        (x31, x32, x33, x34) = _state
+        if x30 < x34:
+            return (x31, x32, x33, x34)
+        x35 = x11[x30]
+        (x36, x37) = x29[x30]
+        if equality(x36, NEG_ONE):
+            x38 = branch(equality(x33, ZERO), THREE, TWO)
+            x39 = frozenset({(x38, (x33, x31))})
+            return (x31, combine(x32, x39), add(x33, ONE), x34)
+        if x30 != x36:
+            return (x31, x32, x33, x34)
+        x40 = add(subtract(x37, x36), ONE)
+        if equality(x36, ZERO):
+            x41 = frozenset({(THREE, (ZERO, x31))})
+            x42 = combine(x32, x41)
+
+            def _e6de6e8f_fold_g0s(_st, x43):
+                (x44, x45, x46) = _st
+                x47 = x11[add(x36, x43)]
+                if equality(x47, ONE):
+                    x48 = frozenset({(TWO, (x46, subtract(x44, ONE))), (TWO, (x46, x44))})
+                    x49 = subtract(x44, ONE)
+                else:
+                    x48 = frozenset({(TWO, (x46, x44)), (TWO, (x46, add(x44, ONE)))})
+                    x49 = add(x44, ONE)
+                return (x49, combine(x45, x48), add(x46, ONE))
+
+            (x50, x51, x52) = fold(interval(ZERO, x40, ONE), (x31, x42, ONE), _e6de6e8f_fold_g0s)
+
+            def _e6de6e8f_fold_g0c(_st, x53):
+                (x54, x55, x56) = _st
+                x57 = frozenset({(TWO, (x56, x54))})
+                return (x54, combine(x55, x57), add(x56, ONE))
+
+            (x58, x59, x60) = fold(interval(ZERO, subtract(x40, ONE), ONE), (x50, x51, x52), _e6de6e8f_fold_g0c)
+            return (x58, x59, x60, add(x37, ONE))
+        else:
+            if equality(x40, ONE):
+                x61 = x11[x36]
+                if equality(x61, ONE):
+                    x62 = frozenset({(TWO, (x33, subtract(x31, ONE))), (TWO, (x33, x31))})
+                    x63 = subtract(x31, ONE)
+                else:
+                    x62 = frozenset({(TWO, (x33, x31)), (TWO, (x33, add(x31, ONE)))})
+                    x63 = add(x31, ONE)
+                x64 = combine(x32, x62)
+                x65 = add(x33, ONE)
+                x66 = frozenset({(TWO, (x65, x63))})
+                x67 = combine(x64, x66)
+                return (x63, x67, add(x65, ONE), add(x37, ONE))
+            else:
+                x68 = frozenset({(TWO, (x33, x31))})
+                x69 = frozenset({(TWO, (add(x33, ONE), x31))})
+                x70 = combine(x32, combine(x68, x69))
+                x71 = add(x33, TWO)
+
+                def _e6de6e8f_fold_ng0s(_st, x72):
+                    (x73, x74, x75) = _st
+                    x76 = x11[add(x36, x72)]
+                    if equality(x76, ONE):
+                        x77 = frozenset({(TWO, (x75, subtract(x73, ONE))), (TWO, (x75, x73))})
+                        x78 = subtract(x73, ONE)
+                    else:
+                        x77 = frozenset({(TWO, (x75, x73)), (TWO, (x75, add(x73, ONE)))})
+                        x78 = add(x73, ONE)
+                    return (x78, combine(x74, x77), add(x75, ONE))
+
+                (x79, x80, x81) = fold(interval(ZERO, x40, ONE), (x31, x70, x71), _e6de6e8f_fold_ng0s)
+                x82 = subtract(x40, TWO)
+
+                def _e6de6e8f_fold_ng0c(_st, x83):
+                    (x84, x85, x86) = _st
+                    x87 = frozenset({(TWO, (x86, x84))})
+                    return (x84, combine(x85, x87), add(x86, ONE))
+
+                (x88, x89, x90) = fold(interval(ZERO, x82, ONE), (x79, x80, x81), _e6de6e8f_fold_ng0c)
+                return (x88, x89, x90, add(x37, ONE))
+
+    x91 = frozenset()
+    (_, x92, _, _) = fold(interval(ZERO, x12, ONE), (THREE, x91, ZERO, ZERO), _e6de6e8f_fold_build)
+    x93 = canvas(ZERO, astuple(EIGHT, SEVEN))
+    x94 = paint(x93, x92)
+    return x94
+
 def verify_e681b708(I: Grid) -> Grid:
 
     def _e681b708_markers(I):
         x0 = height(I)
         x1 = width(I)
         x2 = frozenset()
-        x3 = ZERO
-        while x3 < x0:
-            x4 = ZERO
-            while x4 < x1:
+
+        def _e681b708_fold_36011_0(x2, x3):
+
+            def _e681b708_fold_36013_1(x2, x4):
                 x5 = index(I, astuple(x3, x4))
                 x6 = both(x5 != ZERO, x5 != ONE)
                 if x6:
                     x2 = insert(astuple(x3, astuple(x4, x5)), x2)
-                x4 = increment(x4)
-            x3 = increment(x3)
+                return x2
+            x2 = fold(range(x1), x2, _e681b708_fold_36013_1)
+            return x2
+        x2 = fold(range(x0), x2, _e681b708_fold_36011_0)
         return x2
 
     def _e681b708_hsegments(I, mks):
         x0 = frozenset()
         x1 = frozenset()
         x2 = totuple(mks)
-        x3 = ZERO
-        while x3 < size(mks):
+
+        def _e681b708_fold_36027_2(x1, x3):
             x4 = x2[x3]
             x5 = first(x4)
             x1 = insert(x5, x1)
-            x3 = increment(x3)
+            return x1
+        x1 = fold(range(size(mks)), x1, _e681b708_fold_36027_2)
         x6 = totuple(x1)
-        x7 = ZERO
-        while x7 < size(x1):
+
+        def _e681b708_fold_36034_3(x0, x7):
             x8 = x6[x7]
             x9 = frozenset()
-            x10 = ZERO
-            while x10 < size(mks):
+
+            def _e681b708_fold_36038_4(x9, x10):
                 x11 = x2[x10]
                 x12 = first(x11)
                 if x12 == x8:
                     x13 = first(last(x11))
                     x9 = insert(x13, x9)
-                x10 = increment(x10)
+                return x9
+            x9 = fold(range(size(mks)), x9, _e681b708_fold_36038_4)
             x14 = order(x9, identity)
-            x15 = ZERO
-            while x15 < subtract(size(x14), ONE):
+
+            def _e681b708_fold_36047_5(x0, x15):
                 x16 = x14[x15]
                 x17 = x14[increment(x15)]
                 x18 = T
-                x19 = increment(x16)
-                while x19 < x17:
+
+                def _e681b708_fold_36052_6(x18, x19):
                     x20 = index(I, astuple(x8, x19))
                     if x20 != ONE:
                         x18 = F
-                    x19 = increment(x19)
+                    return x18
+                x18 = fold(range(increment(x16), x17), x18, _e681b708_fold_36052_6)
                 if x18:
                     x0 = insert(astuple(x8, astuple(x16, x17)), x0)
-                x15 = increment(x15)
-            x7 = increment(x7)
+                return x0
+            x0 = fold(range(subtract(size(x14), ONE)), x0, _e681b708_fold_36047_5)
+            return x0
+        x0 = fold(range(size(x1)), x0, _e681b708_fold_36034_3)
         return x0
 
     def _e681b708_vsegments(I, mks):
         x0 = frozenset()
         x1 = frozenset()
         x2 = totuple(mks)
-        x3 = ZERO
-        while x3 < size(mks):
+
+        def _e681b708_fold_36068_7(x1, x3):
             x4 = x2[x3]
             x5 = first(last(x4))
             x1 = insert(x5, x1)
-            x3 = increment(x3)
+            return x1
+        x1 = fold(range(size(mks)), x1, _e681b708_fold_36068_7)
         x6 = totuple(x1)
-        x7 = ZERO
-        while x7 < size(x1):
+
+        def _e681b708_fold_36075_8(x0, x7):
             x8 = x6[x7]
             x9 = frozenset()
-            x10 = ZERO
-            while x10 < size(mks):
+
+            def _e681b708_fold_36079_9(x9, x10):
                 x11 = x2[x10]
                 x12 = first(last(x11))
                 if x12 == x8:
                     x13 = first(x11)
                     x9 = insert(x13, x9)
-                x10 = increment(x10)
+                return x9
+            x9 = fold(range(size(mks)), x9, _e681b708_fold_36079_9)
             x14 = order(x9, identity)
-            x15 = ZERO
-            while x15 < subtract(size(x14), ONE):
+
+            def _e681b708_fold_36088_10(x0, x15):
                 x16 = x14[x15]
                 x17 = x14[increment(x15)]
                 x18 = T
-                x19 = increment(x16)
-                while x19 < x17:
+
+                def _e681b708_fold_36093_11(x18, x19):
                     x20 = index(I, astuple(x19, x8))
                     if x20 != ONE:
                         x18 = F
-                    x19 = increment(x19)
+                    return x18
+                x18 = fold(range(increment(x16), x17), x18, _e681b708_fold_36093_11)
                 if x18:
                     x0 = insert(astuple(x8, astuple(x16, x17)), x0)
-                x15 = increment(x15)
-            x7 = increment(x7)
+                return x0
+            x0 = fold(range(subtract(size(x14), ONE)), x0, _e681b708_fold_36088_10)
+            return x0
+        x0 = fold(range(size(x1)), x0, _e681b708_fold_36075_8)
         return x0
 
     def _e681b708_wallcells(mks, hsegs, vsegs):
         x0 = frozenset()
         x1 = totuple(mks)
-        x2 = ZERO
-        while x2 < size(mks):
+
+        def _e681b708_fold_36108_12(x0, x2):
             x3 = x1[x2]
             x4 = first(x3)
             x5 = first(last(x3))
             x0 = insert(astuple(x4, x5), x0)
-            x2 = increment(x2)
+            return x0
+        x0 = fold(range(size(mks)), x0, _e681b708_fold_36108_12)
         x6 = totuple(hsegs)
-        x7 = ZERO
-        while x7 < size(hsegs):
+
+        def _e681b708_fold_36116_13(x0, x7):
             x8 = x6[x7]
             x9 = first(x8)
             x10 = first(last(x8))
@@ -36122,10 +36694,11 @@ def verify_e681b708(I: Grid) -> Grid:
             while x12 <= x11:
                 x0 = insert(astuple(x9, x12), x0)
                 x12 = increment(x12)
-            x7 = increment(x7)
+            return x0
+        x0 = fold(range(size(hsegs)), x0, _e681b708_fold_36116_13)
         x13 = totuple(vsegs)
-        x14 = ZERO
-        while x14 < size(vsegs):
+
+        def _e681b708_fold_36128_14(x0, x14):
             x15 = x13[x14]
             x16 = first(x15)
             x17 = first(last(x15))
@@ -36134,7 +36707,8 @@ def verify_e681b708(I: Grid) -> Grid:
             while x19 <= x18:
                 x0 = insert(astuple(x19, x16), x0)
                 x19 = increment(x19)
-            x14 = increment(x14)
+            return x0
+        x0 = fold(range(size(vsegs)), x0, _e681b708_fold_36128_14)
         return x0
 
     def _e681b708_vcontinues(vsegs, col, row, direction):
@@ -36162,38 +36736,43 @@ def verify_e681b708(I: Grid) -> Grid:
         if x1 == ZERO:
             return ONE
         x2 = frozenset()
-        x3 = ZERO
-        while x3 < x1:
+
+        def _e681b708_fold_36166_15(x2, x3):
             x2 = insert(x0[x3], x2)
-            x3 = increment(x3)
+            return x2
+        x2 = fold(range(x1), x2, _e681b708_fold_36166_15)
         x4 = ZERO
         x5 = totuple(x2)
-        x6 = ZERO
-        while x6 < size(x2):
+
+        def _e681b708_fold_36172_16(x4, x6):
             x7 = x5[x6]
             x8 = ZERO
-            x9 = ZERO
-            while x9 < x1:
+
+            def _e681b708_fold_36176_17(x8, x9):
                 if x0[x9] == x7:
                     x8 = increment(x8)
-                x9 = increment(x9)
+                return x8
+            x8 = fold(range(x1), x8, _e681b708_fold_36176_17)
             if x8 > x4:
                 x4 = x8
-            x6 = increment(x6)
+            return x4
+        x4 = fold(range(size(x2)), x4, _e681b708_fold_36172_16)
         x10 = ZERO
-        x11 = ZERO
-        while x11 < size(x2):
+
+        def _e681b708_fold_36185_18(x10, x11):
             x12 = x5[x11]
             x13 = ZERO
-            x14 = ZERO
-            while x14 < x1:
+
+            def _e681b708_fold_36189_19(x13, x14):
                 if x0[x14] == x12:
                     x13 = increment(x13)
-                x14 = increment(x14)
+                return x13
+            x13 = fold(range(x1), x13, _e681b708_fold_36189_19)
             if x13 == x4:
                 if x12 > x10:
                     x10 = x12
-            x11 = increment(x11)
+            return x10
+        x10 = fold(range(size(x2)), x10, _e681b708_fold_36185_18)
         return x10
     x0 = height(I)
     x1 = width(I)
@@ -36204,17 +36783,18 @@ def verify_e681b708(I: Grid) -> Grid:
     x6 = I
     x7 = totuple(x4)
     x8 = totuple(x3)
-    x9 = ZERO
-    while x9 < x0:
-        x10 = ZERO
-        while x10 < x1:
+
+    def _e681b708_fold_36208_20(x6, x9):
+
+        def _e681b708_fold_36210_21(x6, x10):
             x11 = index(I, astuple(x9, x10))
             x12 = contained(astuple(x9, x10), x5)
             if both(x11 == ONE, flip(x12)):
                 x13 = multiply(NEG_ONE, ONE)
                 x14 = x1
-                x15 = ZERO
-                while x15 < size(x4):
+
+                def _e681b708_fold_36217_22(_state, x15):
+                    (x13, x14) = _state
                     x16 = x7[x15]
                     x17 = first(x16)
                     x18 = first(last(x16))
@@ -36224,11 +36804,13 @@ def verify_e681b708(I: Grid) -> Grid:
                             x13 = x17
                         if both(x17 > x10, x17 < x14):
                             x14 = x17
-                    x15 = increment(x15)
+                    return (x13, x14)
+                (x13, x14) = fold(range(size(x4)), (x13, x14), _e681b708_fold_36217_22)
                 x20 = multiply(NEG_ONE, ONE)
                 x21 = x0
-                x22 = ZERO
-                while x22 < size(x3):
+
+                def _e681b708_fold_36231_23(_state, x22):
+                    (x20, x21) = _state
                     x23 = x8[x22]
                     x24 = first(x23)
                     x25 = first(last(x23))
@@ -36238,9 +36820,11 @@ def verify_e681b708(I: Grid) -> Grid:
                             x20 = x24
                         if both(x24 > x9, x24 < x21):
                             x21 = x24
-                    x22 = increment(x22)
-                x27 = ZERO
-                while x27 < size(x4):
+                    return (x20, x21)
+                (x20, x21) = fold(range(size(x3)), (x20, x21), _e681b708_fold_36231_23)
+
+                def _e681b708_fold_36243_24(_state, x27):
+                    (x20, x21) = _state
                     x28 = x7[x27]
                     x29 = first(x28)
                     x30 = first(last(x28))
@@ -36259,11 +36843,12 @@ def verify_e681b708(I: Grid) -> Grid:
                         if both(x30 < x9, x30 > x20):
                             if flip(_e681b708_vcontinues(x4, x29, x30, ZERO)):
                                 x20 = x30
-                    x27 = increment(x27)
+                    return (x20, x21)
+                (x20, x21) = fold(range(size(x4)), (x20, x21), _e681b708_fold_36243_24)
                 x32 = ()
                 x33 = totuple(x2)
-                x34 = ZERO
-                while x34 < size(x2):
+
+                def _e681b708_fold_36266_25(x32, x34):
                     x35 = x33[x34]
                     x36 = first(x35)
                     x37 = first(last(x35))
@@ -36274,11 +36859,14 @@ def verify_e681b708(I: Grid) -> Grid:
                     elif either(x37 == x13, x37 == x14):
                         if both(x20 < x36, x36 < x21):
                             x32 = x32 + (x38,)
-                    x34 = increment(x34)
+                    return x32
+                x32 = fold(range(size(x2)), x32, _e681b708_fold_36266_25)
                 x39 = _e681b708_majority(x32)
                 x6 = fill(x6, x39, frozenset({astuple(x9, x10)}))
-            x10 = increment(x10)
-        x9 = increment(x9)
+            return x6
+        x6 = fold(range(x1), x6, _e681b708_fold_36210_21)
+        return x6
+    x6 = fold(range(x0), x6, _e681b708_fold_36208_20)
     return x6
 
 def verify_e69241bd(I: Grid) -> Grid:
@@ -36424,8 +37012,9 @@ def verify_e734a0e8(I: Grid) -> Grid:
                 if x21 < x22:
                     x23 = F
                     x24 = F
-                    x25 = x18
-                    while x25 < x19:
+
+                    def _e734a0e8_fold_36428_0(_state, x25):
+                        (x23, x24) = _state
                         x26 = x21
                         while x26 < x22:
                             x27 = I[x25][x26]
@@ -36434,7 +37023,8 @@ def verify_e734a0e8(I: Grid) -> Grid:
                             if x27 == ZERO:
                                 x24 = T
                             x26 = increment(x26)
-                        x25 = increment(x25)
+                        return (x23, x24)
+                    (x23, x24) = fold(range(x18, x19), (x23, x24), _e734a0e8_fold_36428_0)
                     if x23:
                         x15 = crop(I, (x18, x21), (x19 - x18, x22 - x21))
                     if x24 and (not x23):
@@ -36900,24 +37490,32 @@ def verify_e88171ec(I: Grid) -> Grid:
         x2 = ZERO
         x3 = ORIGIN
         x4 = ORIGIN
-        x5 = ZERO
-        while x5 < x0:
-            x6 = ZERO
-            while x6 < x1:
-                x7 = x5
-                while x7 < x0:
-                    x8 = x6
-                    while x8 < x1:
+
+        def _e88171ec_fold_36904_0(_state, x5):
+            (x2, x3, x4) = _state
+
+            def _e88171ec_fold_36906_1(_state, x6):
+                (x2, x3, x4) = _state
+
+                def _e88171ec_fold_36908_2(_state, x7):
+                    (x2, x3, x4) = _state
+
+                    def _e88171ec_fold_36910_3(_state, x8):
+                        (x2, x3, x4) = _state
                         x9 = _e88171ec_all_zero(I, x5, x6, x7, x8)
                         x10 = multiply(increment(subtract(x7, x5)), increment(subtract(x8, x6)))
                         x11 = both(x9, greater(x10, x2))
                         x2 = branch(x11, x10, x2)
                         x3 = branch(x11, astuple(x5, x6), x3)
                         x4 = branch(x11, astuple(x7, x8), x4)
-                        x8 = increment(x8)
-                    x7 = increment(x7)
-                x6 = increment(x6)
-            x5 = increment(x5)
+                        return (x2, x3, x4)
+                    (x2, x3, x4) = fold(range(x6, x1), (x2, x3, x4), _e88171ec_fold_36910_3)
+                    return (x2, x3, x4)
+                (x2, x3, x4) = fold(range(x5, x0), (x2, x3, x4), _e88171ec_fold_36908_2)
+                return (x2, x3, x4)
+            (x2, x3, x4) = fold(range(x1), (x2, x3, x4), _e88171ec_fold_36906_1)
+            return (x2, x3, x4)
+        (x2, x3, x4) = fold(range(x0), (x2, x3, x4), _e88171ec_fold_36904_0)
         return (x3, x4)
     x0 = _e88171ec_find_rect(I)
     x1 = first(x0)
@@ -39261,23 +39859,26 @@ def verify_f9a67cb5(I: Grid) -> Grid:
 
     def _f9a67cb5_gaps(I, x0, x1, x2):
         x3 = ()
-        x4 = ZERO
-        while greater(x2, x4):
+
+        def _f9a67cb5_fold_39575_0(x3, x4):
             x5 = branch(x1, astuple(x0, x4), astuple(x4, x0))
             x6 = index(I, x5)
             x3 = branch(equality(x6, EIGHT), x3, x3 + (x4,))
-            x4 = increment(x4)
+            return x3
+        x3 = fold(range(x2), x3, _f9a67cb5_fold_39575_0)
         return x3
 
     def _f9a67cb5_brackets(x0, x1, x2):
         x3 = invert(ONE)
         x4 = x2
-        x5 = ZERO
-        while greater(size(x0), x5):
+
+        def _f9a67cb5_fold_39586_1(_state, x5):
+            (x3, x4) = _state
             x6 = x0[x5]
             x3 = branch(both(flip(greater(x6, x1)), greater(x6, x3)), x6, x3)
             x4 = branch(both(flip(greater(x1, x6)), greater(x4, x6)), x6, x4)
-            x5 = increment(x5)
+            return (x3, x4)
+        (x3, x4) = fold(range(size(x0)), (x3, x4), _f9a67cb5_fold_39586_1)
         return (x3, x4)
     x0 = ofcolor(I, TWO)
     x1 = first(totuple(x0))
@@ -39344,11 +39945,12 @@ def verify_f9a67cb5(I: Grid) -> Grid:
             x52 = subtract(x42, x17)
             x53 = subtract(x43, x18)
             x54 = frozenset()
-            x55 = x50
-            while flip(greater(x55, x51)):
+
+            def _f9a67cb5_fold_39658_2(x54, x55):
                 x56 = branch(x41, astuple(x52, x55), astuple(x55, x53))
                 x54 = insert(x56, x54)
-                x55 = increment(x55)
+                return x54
+            x54 = fold(range(x50, x51 + 1), x54, _f9a67cb5_fold_39658_2)
             x11 = fill(x11, TWO, x54)
             x57 = contained(x48, x45)
             x58 = contained(x49, x45)
@@ -39844,35 +40446,39 @@ def verify_fe9372f3(I: Grid) -> Grid:
 
     def _fe9372f3_rays(x0, x2, x3, x4, x5):
         x6 = x0
-        x7 = subtract(x2, TWO)
         x8 = x2
-        while x7 >= ZERO:
+
+        def _fe9372f3_fold_40159_0(x6, x7):
             x9 = subtract(x2, x7)
             x10 = _fe9372f3_pattern(x9)
             x11 = initset(astuple(x7, x3))
             x6 = fill(x6, x10, x11)
-            x7 = decrement(x7)
-        x12 = add(x2, TWO)
-        while x12 < x4:
+            return x6
+        x6 = fold(range(subtract(x2, TWO), ZERO - 1, -1), x6, _fe9372f3_fold_40159_0)
+
+        def _fe9372f3_fold_40166_1(x6, x12):
             x13 = subtract(x12, x2)
             x14 = _fe9372f3_pattern(x13)
             x15 = initset(astuple(x12, x3))
             x6 = fill(x6, x14, x15)
-            x12 = increment(x12)
-        x16 = subtract(x3, TWO)
-        while x16 >= ZERO:
+            return x6
+        x6 = fold(range(add(x2, TWO), x4), x6, _fe9372f3_fold_40166_1)
+
+        def _fe9372f3_fold_40173_2(x6, x16):
             x17 = subtract(x3, x16)
             x18 = _fe9372f3_pattern(x17)
             x19 = initset(astuple(x2, x16))
             x6 = fill(x6, x18, x19)
-            x16 = decrement(x16)
-        x20 = add(x3, TWO)
-        while x20 < x5:
+            return x6
+        x6 = fold(range(subtract(x3, TWO), ZERO - 1, -1), x6, _fe9372f3_fold_40173_2)
+
+        def _fe9372f3_fold_40180_3(x6, x20):
             x21 = subtract(x20, x3)
             x22 = _fe9372f3_pattern(x21)
             x23 = initset(astuple(x2, x20))
             x6 = fill(x6, x22, x23)
-            x20 = increment(x20)
+            return x6
+        x6 = fold(range(add(x3, TWO), x5), x6, _fe9372f3_fold_40180_3)
         return x6
     x0 = ofcolor(I, TWO)
     x1 = center(x0)
