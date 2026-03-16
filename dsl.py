@@ -1643,3 +1643,63 @@ def bbox(
 ) -> Tuple[Integer, Integer, Integer, Integer]:
     """ bounding box as (uppermost, lowermost, leftmost, rightmost) """
     return (uppermost(patch), lowermost(patch), leftmost(patch), rightmost(patch))
+
+
+def reachable(
+    seed: Indices,
+    domain: Indices,
+    diagonal: Boolean = False
+) -> Indices:
+    """ find all cells in domain reachable from seed via adjacency.
+    seed cells may be outside domain; expansion goes through both seed and domain cells. """
+    nbfn = neighbors if diagonal else dneighbors
+    current = frozenset(seed)
+    prev = frozenset()
+    while current != prev:
+        prev = current
+        expanded = frozenset()
+        for loc in current:
+            expanded = expanded | nbfn(loc)
+        current = current | (expanded & domain)
+    return current
+
+
+def connected_components(
+    indices: Indices,
+    diagonal: Boolean = False
+) -> FrozenSet:
+    """ partition indices into connected components via adjacency """
+    remaining = set(indices)
+    components = set()
+    nbfn = neighbors if diagonal else dneighbors
+    while remaining:
+        seed = next(iter(remaining))
+        component = set()
+        frontier = {seed}
+        while frontier:
+            current = frontier.pop()
+            if current in remaining:
+                remaining.discard(current)
+                component.add(current)
+                frontier.update(nbfn(current) & remaining)
+        components.add(frozenset(component))
+    return frozenset(components)
+
+
+def trace(
+    start: IntegerTuple,
+    direction: IntegerTuple,
+    grid: Grid,
+    match: Integer
+) -> Indices:
+    """ walk from start in direction collecting cells where grid color equals match, stop at boundary or different color """
+    h, w = len(grid), len(grid[0])
+    result = set()
+    r, c = start
+    dr, dc = direction
+    while 0 <= r < h and 0 <= c < w:
+        if grid[r][c] != match:
+            break
+        result.add((r, c))
+        r, c = r + dr, c + dc
+    return frozenset(result)

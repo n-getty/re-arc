@@ -7,3 +7,6 @@ from refactoring.transformers.iteration import IterationTransformer
 from refactoring.transformers.bfs import BFSTransformer, HelperBFSTransformer
 from refactoring.transformers.fold_inline import FoldInlineTransformer
 from refactoring.transformers.direct_inline import DirectCallInlineTransformer
+from refactoring.transformers.reachable import ReachableTransformer
+from refactoring.transformers.trace import TraceTransformer
+from refactoring.transformers.components import ComponentTransformer

@@ -4467,55 +4467,19 @@ def verify_256b0a75(I: Grid) -> Grid:
             x50 = greater(x3, x47)
             x51 = greater(x47, x4)
             if x48:
-                x52 = decrement(x46)
-                x53 = frozenset()
-                x54 = x52
-                while greater(x54, NEG_ONE):
-                    x55 = astuple(x54, x47)
-                    x56 = index(I, x55)
-                    if greater(x56, ZERO):
-                        break
-                    x53 = insert(x55, x53)
-                    x54 = decrement(x54)
+                x53 = trace(astuple(decrement(x46), x47), UP, I, ZERO)
                 x53 = insert(x43, x53)
                 x41 = fill(x41, x44, x53)
             elif x49:
-                x52 = increment(x46)
-                x53 = frozenset()
-                x54 = x52
-                while greater(x14, x54):
-                    x55 = astuple(x54, x47)
-                    x56 = index(I, x55)
-                    if greater(x56, ZERO):
-                        break
-                    x53 = insert(x55, x53)
-                    x54 = increment(x54)
+                x53 = trace(astuple(increment(x46), x47), DOWN, I, ZERO)
                 x53 = insert(x43, x53)
                 x41 = fill(x41, x44, x53)
             elif x50:
-                x52 = decrement(x47)
-                x53 = frozenset()
-                x54 = x52
-                while greater(x54, NEG_ONE):
-                    x55 = astuple(x46, x54)
-                    x56 = index(I, x55)
-                    if greater(x56, ZERO):
-                        break
-                    x53 = insert(x55, x53)
-                    x54 = decrement(x54)
+                x53 = trace(astuple(x46, decrement(x47)), LEFT, I, ZERO)
                 x53 = insert(x43, x53)
                 x41 = fill(x41, x44, x53)
             elif x51:
-                x52 = increment(x47)
-                x53 = frozenset()
-                x54 = x52
-                while greater(x15, x54):
-                    x55 = astuple(x46, x54)
-                    x56 = index(I, x55)
-                    if greater(x56, ZERO):
-                        break
-                    x53 = insert(x55, x53)
-                    x54 = increment(x54)
+                x53 = trace(astuple(x46, increment(x47)), RIGHT, I, ZERO)
                 x53 = insert(x43, x53)
                 x41 = fill(x41, x44, x53)
         x42 = increment(x42)
@@ -7543,19 +7507,7 @@ def verify_37ce87bb(I: Grid) -> Grid:
 def verify_37d3e8b2(I: Grid) -> Grid:
 
     def _37d3e8b2_count_holes(x0):
-        x1 = frozenset(x0)
-        x2 = 0
-        while size(x1) > 0:
-            x2 = x2 + 1
-            x3 = first(totuple(x1))
-            x4 = frozenset({x3})
-            x5 = frozenset()
-            while x4 != x5:
-                x5 = frozenset(x4)
-                x6 = mapply(dneighbors, x4)
-                x7 = intersection(x6, x1)
-                x4 = combine(x4, x7)
-            x1 = difference(x1, x4)
+        x2 = size(connected_components(x0))
         return x2
     x0 = objects(I, T, F, T)
     x1 = I
@@ -9871,14 +9823,7 @@ def verify_465b7d93(I: Grid) -> Grid:
         x31 = fold(range(size(x27)), x31, _465b7d93_fold_9743_0)
         x48 = difference(x47, x31)
         x49 = _465b7d93_onboundary(x4, x5, x6, x7)
-        x50 = sfilter(x48, x49)
-        x51 = T
-        while x51:
-            x52 = mapply(dneighbors, x50)
-            x53 = intersection(x52, x48)
-            x54 = difference(x53, x50)
-            x51 = greater(size(x54), ZERO)
-            x50 = combine(x50, x54)
+        x50 = reachable(sfilter(x48, x49), x48)
         x55 = difference(x48, x50)
         x56 = combine(x31, x55)
     x57 = fill(I, x0, x16)
@@ -13166,14 +13111,7 @@ def verify_5ad8a7c0(I: Grid) -> Grid:
 def verify_5adee1b2(I: Grid) -> Grid:
 
     def _5adee1b2_flood(x0, x1):
-        x2 = x0
-        x3 = True
-        while x3:
-            x4 = mapply(dneighbors, x2)
-            x5 = intersection(x4, x1)
-            x6 = combine(x2, x5)
-            x3 = greater(size(x6), size(x2))
-            x2 = x6
+        x2 = reachable(x0, x1)
         x7 = intersection(x2, x1)
         return x7
     x0 = height(I)
@@ -18738,20 +18676,7 @@ def verify_81c0276b(I: Grid) -> Grid:
 def verify_825aa9e9(I: Grid) -> Grid:
 
     def _825aa9e9_components(x0):
-        x1 = set()
-        x2 = list(x0)
-        while x2:
-            x3 = x2.pop()
-            x4 = frozenset({x3})
-            x5 = frozenset()
-            while x4 != x5:
-                x5 = x4
-                x6 = mapply(dneighbors, x4)
-                x7 = intersection(x6, x0)
-                x4 = combine(x4, x7)
-            x1.add(x4)
-            x8 = list(difference(frozenset(x2), x4))
-            x2 = x8
+        x1 = connected_components(x0)
         return frozenset(x1)
     x0 = height(I)
     x1 = width(I)
@@ -33913,14 +33838,7 @@ def verify_d93c6891(I: Grid) -> Grid:
         x20 = intersection(x19, x0)
         x21 = size(x20)
         if x21 > ZERO:
-            x23 = x20
-            x24 = T
-            while x24:
-                x25 = mapply(dneighbors, x23)
-                x26 = intersection(x25, x0)
-                x28 = combine(x23, x26)
-                x24 = greater(size(x28), size(x23))
-                x23 = x28
+            x23 = reachable(x20, x0)
             x29 = size(x23)
             x30 = subtract(lowermost(x23), uppermost(x23))
             x31 = subtract(rightmost(x23), leftmost(x23))
@@ -36436,7 +36354,6 @@ def verify_e6de6e8f(I: Grid) -> Grid:
                 else:
                     return (x3 + (TWO,), T)
         return (x3 + (ZERO,), F)
-
     (x11, _) = fold(x1, ((), F), _e6de6e8f_fold_parse)
     x12 = size(x11)
 
@@ -36453,7 +36370,6 @@ def verify_e6de6e8f(I: Grid) -> Grid:
             return (x14 + ((x17, x13),), NEG_ONE)
         else:
             return (x14 + ((NEG_ONE, NEG_ONE),), NEG_ONE)
-
     (x20, _) = fold(interval(ZERO, x12, ONE), ((), NEG_ONE), _e6de6e8f_fold_runs)
 
     def _e6de6e8f_fold_fixruns(_state, x21):
@@ -36472,7 +36388,6 @@ def verify_e6de6e8f(I: Grid) -> Grid:
             if not equality(x28, NEG_ONE):
                 break
         return (x22 + ((x23, x25),),)
-
     (x29,) = fold(interval(ZERO, x12, ONE), ((),), _e6de6e8f_fold_fixruns)
 
     def _e6de6e8f_fold_build(_state, x30):
@@ -36502,58 +36417,52 @@ def verify_e6de6e8f(I: Grid) -> Grid:
                     x48 = frozenset({(TWO, (x46, x44)), (TWO, (x46, add(x44, ONE)))})
                     x49 = add(x44, ONE)
                 return (x49, combine(x45, x48), add(x46, ONE))
-
             (x50, x51, x52) = fold(interval(ZERO, x40, ONE), (x31, x42, ONE), _e6de6e8f_fold_g0s)
 
             def _e6de6e8f_fold_g0c(_st, x53):
                 (x54, x55, x56) = _st
                 x57 = frozenset({(TWO, (x56, x54))})
                 return (x54, combine(x55, x57), add(x56, ONE))
-
             (x58, x59, x60) = fold(interval(ZERO, subtract(x40, ONE), ONE), (x50, x51, x52), _e6de6e8f_fold_g0c)
             return (x58, x59, x60, add(x37, ONE))
-        else:
-            if equality(x40, ONE):
-                x61 = x11[x36]
-                if equality(x61, ONE):
-                    x62 = frozenset({(TWO, (x33, subtract(x31, ONE))), (TWO, (x33, x31))})
-                    x63 = subtract(x31, ONE)
-                else:
-                    x62 = frozenset({(TWO, (x33, x31)), (TWO, (x33, add(x31, ONE)))})
-                    x63 = add(x31, ONE)
-                x64 = combine(x32, x62)
-                x65 = add(x33, ONE)
-                x66 = frozenset({(TWO, (x65, x63))})
-                x67 = combine(x64, x66)
-                return (x63, x67, add(x65, ONE), add(x37, ONE))
+        elif equality(x40, ONE):
+            x61 = x11[x36]
+            if equality(x61, ONE):
+                x62 = frozenset({(TWO, (x33, subtract(x31, ONE))), (TWO, (x33, x31))})
+                x63 = subtract(x31, ONE)
             else:
-                x68 = frozenset({(TWO, (x33, x31))})
-                x69 = frozenset({(TWO, (add(x33, ONE), x31))})
-                x70 = combine(x32, combine(x68, x69))
-                x71 = add(x33, TWO)
+                x62 = frozenset({(TWO, (x33, x31)), (TWO, (x33, add(x31, ONE)))})
+                x63 = add(x31, ONE)
+            x64 = combine(x32, x62)
+            x65 = add(x33, ONE)
+            x66 = frozenset({(TWO, (x65, x63))})
+            x67 = combine(x64, x66)
+            return (x63, x67, add(x65, ONE), add(x37, ONE))
+        else:
+            x68 = frozenset({(TWO, (x33, x31))})
+            x69 = frozenset({(TWO, (add(x33, ONE), x31))})
+            x70 = combine(x32, combine(x68, x69))
+            x71 = add(x33, TWO)
 
-                def _e6de6e8f_fold_ng0s(_st, x72):
-                    (x73, x74, x75) = _st
-                    x76 = x11[add(x36, x72)]
-                    if equality(x76, ONE):
-                        x77 = frozenset({(TWO, (x75, subtract(x73, ONE))), (TWO, (x75, x73))})
-                        x78 = subtract(x73, ONE)
-                    else:
-                        x77 = frozenset({(TWO, (x75, x73)), (TWO, (x75, add(x73, ONE)))})
-                        x78 = add(x73, ONE)
-                    return (x78, combine(x74, x77), add(x75, ONE))
+            def _e6de6e8f_fold_ng0s(_st, x72):
+                (x73, x74, x75) = _st
+                x76 = x11[add(x36, x72)]
+                if equality(x76, ONE):
+                    x77 = frozenset({(TWO, (x75, subtract(x73, ONE))), (TWO, (x75, x73))})
+                    x78 = subtract(x73, ONE)
+                else:
+                    x77 = frozenset({(TWO, (x75, x73)), (TWO, (x75, add(x73, ONE)))})
+                    x78 = add(x73, ONE)
+                return (x78, combine(x74, x77), add(x75, ONE))
+            (x79, x80, x81) = fold(interval(ZERO, x40, ONE), (x31, x70, x71), _e6de6e8f_fold_ng0s)
+            x82 = subtract(x40, TWO)
 
-                (x79, x80, x81) = fold(interval(ZERO, x40, ONE), (x31, x70, x71), _e6de6e8f_fold_ng0s)
-                x82 = subtract(x40, TWO)
-
-                def _e6de6e8f_fold_ng0c(_st, x83):
-                    (x84, x85, x86) = _st
-                    x87 = frozenset({(TWO, (x86, x84))})
-                    return (x84, combine(x85, x87), add(x86, ONE))
-
-                (x88, x89, x90) = fold(interval(ZERO, x82, ONE), (x79, x80, x81), _e6de6e8f_fold_ng0c)
-                return (x88, x89, x90, add(x37, ONE))
-
+            def _e6de6e8f_fold_ng0c(_st, x83):
+                (x84, x85, x86) = _st
+                x87 = frozenset({(TWO, (x86, x84))})
+                return (x84, combine(x85, x87), add(x86, ONE))
+            (x88, x89, x90) = fold(interval(ZERO, x82, ONE), (x79, x80, x81), _e6de6e8f_fold_ng0c)
+            return (x88, x89, x90, add(x37, ONE))
     x91 = frozenset()
     (_, x92, _, _) = fold(interval(ZERO, x12, ONE), (THREE, x91, ZERO, ZERO), _e6de6e8f_fold_build)
     x93 = canvas(ZERO, astuple(EIGHT, SEVEN))
@@ -36874,17 +36783,7 @@ def verify_e69241bd(I: Grid) -> Grid:
     def _e69241bd_flood(grid, loc, color):
         x0 = asindices(grid)
         x1 = ofcolor(grid, ZERO)
-        x2 = initset(loc)
-        x3 = x2
-        x4 = True
-        while x4:
-            x5 = mapply(dneighbors, x3)
-            x6 = intersection(x5, x1)
-            x7 = difference(x6, x2)
-            x8 = combine(x2, x7)
-            x4 = size(x7) > 0
-            x3 = x7
-            x2 = x8
+        x2 = reachable(initset(loc), x1)
         x9 = difference(x2, initset(loc))
         return x9
     x0 = palette(I)
@@ -37790,20 +37689,7 @@ def verify_e9fc42f2(I: Grid) -> Grid:
         x0 = mostcolor(I)
         x1 = asindices(I)
         x2 = difference(x1, ofcolor(I, x0))
-        x3 = frozenset()
-        x4 = x2
-        while size(x4) > ZERO:
-            x5 = first(totuple(x4))
-            x6 = initset(x5)
-            x7 = T
-            while x7:
-                x8 = mapply(dneighbors, x6)
-                x9 = intersection(x8, x4)
-                x10 = combine(x6, x9)
-                x7 = greater(size(x10), size(x6))
-                x6 = x10
-            x4 = difference(x4, x6)
-            x3 = insert(x6, x3)
+        x3 = connected_components(x2)
         return x3
 
     def _e9fc42f2_shared_marker(x0, x1, x2):
@@ -38647,14 +38533,7 @@ def verify_f18ec8cc(I: Grid) -> Grid:
 def verify_f1bcbc2c(I: Grid) -> Grid:
 
     def _f1bcbc2c_flood(x0, x1):
-        x2 = intersection(x0, x1)
-        x3 = x2
-        x4 = frozenset()
-        while x3 != x4:
-            x4 = x3
-            x5 = mapply(dneighbors, x3)
-            x6 = intersection(x5, x1)
-            x3 = combine(x3, x6)
+        x3 = reachable(intersection(x0, x1), x1)
         return x3
 
     def _f1bcbc2c_is_corridor(x0, x1):

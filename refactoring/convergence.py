@@ -12,6 +12,9 @@ from refactoring.transformers import (
     TupleUnpackTransformer,
     ForFoldTransformer,
     BFSTransformer,
+    ReachableTransformer,
+    TraceTransformer,
+    ComponentTransformer,
 )
 from refactoring.apply import main as apply_refactors
 
@@ -24,6 +27,9 @@ PIPELINE = [
     ('while_fold', [WhileFoldTransformer]),
     ('bbox+unpack', [BboxTransformer, TupleUnpackTransformer]),
     ('for_fold', [ForFoldTransformer]),
+    ('reachable', [ReachableTransformer]),
+    ('trace', [TraceTransformer]),
+    ('components', [ComponentTransformer]),
     ('bfs', [BFSTransformer]),
 ]
 
